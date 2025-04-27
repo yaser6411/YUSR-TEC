@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YUSR-TEC - منصة أوامر ذكية</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <img src="YUSR-BLACK.png" alt="YUSR-TEC Logo" class="logo">
+        <h1>منصة YUSR-TEC للأوامر الذكية</h1>
+    </div>
+
+    <div class="container">
+        <h2>تشغيل الأوامر</h2>
+
+        <div class="form">
+            <label>الأداة:</label>
+            <input type="text" id="tool" placeholder="مثال: nmap">
+
+            <label>الأمر:</label>
+            <input type="text" id="command" placeholder="مثال: nmap -A 192.168.1.1">
+
+            <button onclick="runCommand()">تشغيل</button>
+        </div>
+
+        <h2>سجل الأوامر</h2>
+        <div id="logs"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
