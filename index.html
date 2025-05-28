@@ -16,6 +16,23 @@
         <h2>تشغيل الأوامر</h2>
 
         <div class="form">
+            <h3>🤖 الفحص الذكي بالذكاء الاصطناعي</h3>
+            <label>الهدف (IP أو URL):</label>
+            <input type="text" id="aiTarget" placeholder="مثال: 192.168.1.1 أو example.com">
+            
+            <label>نوع الفحص:</label>
+            <select id="scanType">
+                <option value="auto">تلقائي - دع الAI يختار</option>
+                <option value="find-bugs">البحث عن الثغرات</option>
+                <option value="create-bugs">إنشاء استغلال للثغرات</option>
+                <option value="comprehensive">فحص شامل</option>
+            </select>
+            
+            <button onclick="runAIScan()" class="ai-button">🚀 بدء الفحص الذكي</button>
+        </div>
+
+        <div class="form manual-form">
+            <h3>⚙️ الأوامر اليدوية</h3>
             <label>الأداة:</label>
             <input type="text" id="tool" placeholder="مثال: nmap">
 
