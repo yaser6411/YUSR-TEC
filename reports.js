@@ -74,6 +74,7 @@ function createReportCard(report) {
         <div style="margin-top: 15px; text-align: left;">
             <button onclick="analyzeReport(${report.id})" style="background: #0099ff;">🔍 تحليل مفصل</button>
             <button onclick="exportSingleReport(${report.id})" style="background: #666;">📄 تصدير</button>
+            <button onclick="deleteReport(${report.id})" style="background: #ff4444;">🗑️ حذف</button>
             ${report.tool === 'AI-Scanner' ? `<button onclick="generateExploit(${report.id})" style="background: #ff4444;">⚡ إنشاء استغلال</button>` : ''}
         </div>
     `;
@@ -301,6 +302,29 @@ function formatDate(dateString) {
 
 // تحميل التقارير عند فتح الصفحة
 window.onload = loadReports;
+
+function deleteReport(id) {
+    if (!confirm('هل أنت متأكد من حذف هذا التقرير؟')) {
+        return;
+    }
+
+    fetch(`${apiUrl}/delete-report/${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('✅ تم حذف التقرير بنجاح');
+            loadReports(); // Reload reports
+        } else {
+            alert('❌ فشل في حذف التقرير');
+        }
+    })
+    .catch(error => {
+        console.error('خطأ في حذف التقرير:', error);
+        alert('حدث خطأ أثناء حذف التقرير');
+    });
+}
 
 // تحديث تلقائي كل 30 ثانية
 setInterval(loadReports, 30000);

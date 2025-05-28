@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YUSR-TEC - منصة الاختراق الذكي</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hack-panel {
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+        
+        .danger-warning {
+            background: #ff4444;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .target-input {
+            width: 100%;
+            padding: 12px;
+            background: #1f1f1f;
+            border: 2px solid #ff0000;
+            color: #fff;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .hack-button {
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+            color: #fff;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+        
+        .hack-button:hover {
+            background: linear-gradient(45deg, #ff4444, #ff6666);
+            transform: scale(1.05);
+        }
+        
+        .exploit-output {
+            background: #000;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        
+        .payload-section {
+            background: #1a0000;
+            border: 1px solid #ff4444;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .attack-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: #2a0000;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #ff4444;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            color: #ff0000;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="YUSR-BLACK.png" alt="YUSR-TEC Logo" class="logo">
+        <h1>🔴 منصة الاختراق الذكي - YUSR-TEC</h1>
+        <nav style="margin-top: 15px;">
+            <button onclick="window.location.href='index.html'" style="background: #666;">🏠 الصفحة الرئيسية</button>
+            <button onclick="window.location.href='reports.html'" style="background: #666; margin: 0 10px;">📊 التقارير</button>
+            <button onclick="window.location.href='hacker.html'" class="hack-button">⚡ الاختراق الذكي</button>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="danger-warning">
+            ⚠️ تحذير: هذه الأداة للأغراض التعليمية والاختبار الأمني فقط. استخدمها على الأنظمة المملوكة لك فقط ⚠️
+        </div>
+
+        <div class="hack-panel">
+            <h2>🎯 اختيار الهدف</h2>
+            <label>نوع الهدف:</label>
+            <select id="targetType" class="target-input">
+                <option value="network">🌐 شبكة/خادم</option>
+                <option value="webapp">💻 تطبيق ويب</option>
+                <option value="domain">🏷️ دومين</option>
+                <option value="api">🔌 API</option>
+                <option value="mobile">📱 تطبيق جوال</option>
+                <option value="iot">🏠 جهاز IoT</option>
+            </select>
+            
+            <label>الهدف:</label>
+            <input type="text" id="hackTarget" class="target-input" placeholder="مثال: 192.168.1.1 أو example.com">
+            
+            <label>نوع الهجوم:</label>
+            <select id="attackType" class="target-input">
+                <option value="auto">🤖 تلقائي - دع الAI يختار</option>
+                <option value="reconnaissance">🔍 استطلاع</option>
+                <option value="vulnerability-scan">🛡️ فحص الثغرات</option>
+                <option value="exploit">⚡ استغلال</option>
+                <option value="post-exploit">👑 ما بعد الاستغلال</option>
+                <option value="social-engineering">🎭 هندسة اجتماعية</option>
+                <option value="dos">💥 إنكار الخدمة</option>
+                <option value="mitm">🕸️ هجوم الوسط</option>
+                <option value="privilege-escalation">⬆️ تصعيد الصلاحيات</option>
+            </select>
+            
+            <button onclick="startAIHack()" class="hack-button">🚀 بدء الهجوم الذكي</button>
+            <button onclick="generatePayloads()" class="hack-button">🧨 إنشاء حمولات</button>
+            <button onclick="clearResults()" style="background: #666;">🧹 مسح النتائج</button>
+        </div>
+
+        <div class="attack-stats" id="attackStats" style="display: none;">
+            <div class="stat-box">
+                <div class="stat-value" id="attacksLaunched">0</div>
+                <div>هجمات مطلقة</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="vulnerabilitiesExploited">0</div>
+                <div>ثغرات مستغلة</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="successRate">0%</div>
+                <div>معدل النجاح</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value" id="timeElapsed">00:00</div>
+                <div>الوقت المنقضي</div>
+            </div>
+        </div>
+
+        <div class="payload-section" id="payloadSection" style="display: none;">
+            <h3>🧨 الحمولات المُولدة</h3>
+            <div id="generatedPayloads"></div>
+        </div>
+
+        <div class="exploit-output" id="hackOutput" style="display: none;"></div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <button onclick="exportHackReport()" style="background: #ff6600; color: #fff; padding: 12px 25px; border: none; border-radius: 5px;">📤 تصدير تقرير الاختراق</button>
+        </div>
+    </div>
+
+    <script src="hacker.js"></script>
+</body>
+</html>
