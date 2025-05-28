@@ -214,6 +214,114 @@ function updateCommandOutput(commandId, output) {
     );
 }
 
+// AI analysis endpoint for detailed reports
+app.post('/api/ai-analyze', (req, res) => {
+    const { reportId, output } = req.body;
+    
+    if (!reportId || !output) {
+        return res.status(400).json({ error: 'معرف التقرير والمخرجات مطلوبة' });
+    }
+    
+    // Simulate AI analysis
+    const analysis = performAIAnalysis(output);
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['AI-Analyzer', `Analysis for report ${reportId}`, analysis],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ analysis, id: this.lastID });
+        }
+    );
+});
+
+// Exploit generation endpoint
+app.post('/api/generate-exploit', (req, res) => {
+    const { reportId, vulnerabilities } = req.body;
+    
+    if (!reportId || !vulnerabilities) {
+        return res.status(400).json({ error: 'معرف التقرير والثغرات مطلوبة' });
+    }
+    
+    const exploit = generateExploitCode(vulnerabilities);
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['Exploit-Generator', `Exploit for report ${reportId}`, exploit],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ exploit, id: this.lastID });
+        }
+    );
+});
+
+// AI Analysis function
+function performAIAnalysis(output) {
+    let analysis = "🤖 تحليل الذكاء الاصطناعي:\n\n";
+    
+    if (output.includes('open') || output.includes('مفتوح')) {
+        analysis += "🔓 تم اكتشاف منافذ مفتوحة - يُنصح بمراجعة الخدمات المُعرضة\n";
+    }
+    
+    if (output.includes('vulnerability') || output.includes('ثغرة')) {
+        analysis += "⚠️ تم اكتشاف ثغرات أمنية - يتطلب تدخل فوري\n";
+    }
+    
+    if (output.includes('sql') || output.includes('injection')) {
+        analysis += "💉 احتمالية وجود ثغرة SQL Injection - خطر عالي\n";
+    }
+    
+    if (output.includes('xss') || output.includes('script')) {
+        analysis += "🕷️ احتمالية وجود ثغرة XSS - يُنصح بتطهير المدخلات\n";
+    }
+    
+    analysis += "\n📊 التوصيات:\n";
+    analysis += "1. إجراء فحص شامل للنظام\n";
+    analysis += "2. تطبيق التحديثات الأمنية\n";
+    analysis += "3. مراجعة صلاحيات المستخدمين\n";
+    analysis += "4. تفعيل مراقبة النظام\n";
+    
+    return analysis;
+}
+
+// Exploit generation function
+function generateExploitCode(vulnerabilities) {
+    let exploit = "⚡ كود الاستغلال المُولد:\n\n";
+    
+    vulnerabilities.forEach((vuln, index) => {
+        exploit += `--- الثغرة ${index + 1} ---\n`;
+        
+        if (vuln.toLowerCase().includes('sql')) {
+            exploit += `# SQL Injection Payload
+' OR '1'='1' --
+' UNION SELECT username, password FROM users --
+'; DROP TABLE users; --\n\n`;
+        }
+        
+        if (vuln.toLowerCase().includes('xss')) {
+            exploit += `# XSS Payload
+<script>alert('XSS')</script>
+<img src=x onerror=alert('XSS')>
+<svg onload=alert('XSS')>\n\n`;
+        }
+        
+        if (vuln.toLowerCase().includes('port') || vuln.toLowerCase().includes('open')) {
+            exploit += `# Port Exploitation
+nmap -sV -sC target_ip
+nc target_ip port_number
+telnet target_ip port_number\n\n`;
+        }
+    });
+    
+    exploit += "⚠️ تحذير: استخدم هذه الاكواد فقط للاختبار على الأنظمة المملوكة لك";
+    
+    return exploit;
+}
+
 app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 السيرفر شغال على http://0.0.0.0:${port}`);
     console.log(`🤖 AI-Powered Bug Hunter & Creator Ready`);
