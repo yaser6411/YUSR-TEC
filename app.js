@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:3001/api';
+const apiUrl = '/api';
 
 function runCommand() {
     const tool = document.getElementById('tool').value.trim();
