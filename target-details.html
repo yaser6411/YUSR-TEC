@@ -316,7 +316,7 @@
 
                     <div class="analytics-chart">
                         <h4>📈 رسم بياني للنشاط في الوقت الحقيقي</h4>
-                        <canvas id="activityChart" width="100%" height="150"></canvas>
+                        <canvas id="activityChart" style="width: 100%; height: 150px; background: #000;"></canvas>
                     </div>
                 </div>
 
@@ -403,6 +403,7 @@
         <!-- Control Panel -->
         <div style="text-align: center; margin: 30px 0;">
             <button onclick="loadTargetsList()" style="background: #00aa00; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">📋 اختيار هدف</button>
+            <button onclick="createDemoTarget('test-server.example.com')" style="background: #9900cc; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">🧪 اختبار بيانات تجريبية</button>
             <button onclick="exportTargetReport()" style="background: #0066cc; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">📤 تصدير تقرير</button>
             <button onclick="startRealTimeMonitoring()" style="background: #ff6600; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">📡 مراقبة مباشرة</button>
         </div>

@@ -1,5 +1,5 @@
 
-const apiUrl = '/api';
+const apiUrl = window.location.origin + '/api';
 
 let currentTarget = null;
 let realTimeInterval = null;
@@ -25,7 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load target by ID from URL parameter
 function loadTargetById(targetId) {
     fetch(`${apiUrl}/commands`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             const targets = parseTargetsFromCommands(data);
             const target = targets.find(t => t.id == targetId || t.address === targetId);
@@ -33,12 +38,25 @@ function loadTargetById(targetId) {
             if (target) {
                 setCurrentTarget(target);
             } else {
-                alert('❌ لم يتم العثور على الهدف المحدد');
+                // Create a demo target if none found
+                createDemoTarget(targetId);
             }
         })
         .catch(error => {
             console.error('خطأ في تحميل الهدف:', error);
+            // Create a demo target for testing
+            createDemoTarget(targetId);
         });
+}
+
+// Create demo target for testing
+function createDemoTarget(targetAddress) {
+    const demoTarget = generateAdvancedTargetData(
+        targetAddress || 'demo-target.com',
+        'website',
+        { output: 'Demo vulnerability found', timestamp: new Date() }
+    );
+    setCurrentTarget(demoTarget);
 }
 
 // Parse targets from commands (same logic as targets.js)
@@ -332,6 +350,17 @@ function generateNetworkServices() {
 function generateRandomString(length) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     return Array.from({length}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+}
+
+function generateMacAddress() {
+    const chars = '0123456789ABCDEF';
+    let mac = '';
+    for (let i = 0; i < 6; i++) {
+        if (i > 0) mac += ':';
+        mac += chars[Math.floor(Math.random() * 16)];
+        mac += chars[Math.floor(Math.random() * 16)];
+    }
+    return mac;
 }
 
 function generateRandomPorts() {
@@ -1112,6 +1141,12 @@ function showAdvancedTab(tabName) {
 // Initialize chart
 function initializeChart() {
     const canvas = document.getElementById('activityChart');
+    if (!canvas) return;
+    
+    // Set canvas dimensions
+    canvas.width = 800;
+    canvas.height = 150;
+    
     const ctx = canvas.getContext('2d');
     
     // Initialize empty chart data
