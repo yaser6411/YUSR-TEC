@@ -124,6 +124,8 @@
                 <option value="domain">🏷️ دومين</option>
                 <option value="api">🔌 API</option>
                 <option value="mobile">📱 تطبيق جوال</option>
+                <option value="android">🤖 هاتف أندرويد</option>
+                <option value="ios">📱 هاتف آيفون</option>
                 <option value="iot">🏠 جهاز IoT</option>
             </select>
 
@@ -170,6 +172,39 @@
         <div class="payload-section" id="payloadSection" style="display: none;">
             <h3>🧨 الحمولات المُولدة</h3>
             <div id="generatedPayloads"></div>
+        </div>
+
+        <div class="hack-panel" id="androidSection" style="display: none;">
+            <h2>🤖 أدوات اختراق الأندرويد المتقدمة</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                <button onclick="generateAndroidPayload()" class="hack-button">📱 إنشاء تروجان أندرويد</button>
+                <button onclick="startADBExploit()" class="hack-button">⚡ استغلال ADB</button>
+                <button onclick="socialEngineeringAttack()" class="hack-button">🎭 هندسة اجتماعية</button>
+                <button onclick="wifiPineapple()" class="hack-button">📡 WiFi Pineapple</button>
+                <button onclick="bluetoothHack()" class="hack-button">🔵 استغلال البلوتوث</button>
+                <button onclick="smsPhishing()" class="hack-button">📧 SMS Phishing</button>
+            </div>
+
+            <div class="payload-section">
+                <h4>🛠️ أدوات متقدمة</h4>
+                <label>رقم الهاتف المستهدف:</label>
+                <input type="text" id="phoneNumber" class="target-input" placeholder="+966501234567">
+                
+                <label>نوع الاستغلال:</label>
+                <select id="androidExploitType" class="target-input">
+                    <option value="trojan">📱 تروجان متقدم</option>
+                    <option value="keylogger">⌨️ Keylogger</option>
+                    <option value="camera-spy">📸 تجسس الكاميرا</option>
+                    <option value="mic-spy">🎤 تجسس الميكروفون</option>
+                    <option value="location-tracker">📍 تتبع الموقع</option>
+                    <option value="sms-intercept">📧 اعتراض الرسائل</option>
+                    <option value="call-recorder">📞 تسجيل المكالمات</option>
+                    <option value="data-theft">💾 سرقة البيانات</option>
+                </select>
+                
+                <button onclick="executeAndroidHack()" class="hack-button">🚀 تنفيذ الهجوم</button>
+            </div>
         </div>
 
         <div class="exploit-output" id="hackOutput" style="display: none;"></div>

