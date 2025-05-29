@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -14,7 +13,7 @@
             padding: 20px;
             margin: 15px 0;
         }
-        
+
         .report-header {
             display: flex;
             justify-content: space-between;
@@ -23,18 +22,18 @@
             padding-bottom: 10px;
             margin-bottom: 15px;
         }
-        
+
         .status-badge {
             padding: 5px 12px;
             border-radius: 15px;
             font-size: 12px;
             font-weight: bold;
         }
-        
+
         .status-completed { background: #00ffcc; color: #000; }
         .status-running { background: #ff9500; color: #000; }
         .status-error { background: #ff4444; color: #fff; }
-        
+
         .command-output {
             background: #0a0a0a;
             border: 1px solid #333;
@@ -46,34 +45,34 @@
             overflow-y: auto;
             margin: 10px 0;
         }
-        
+
         .vulnerability-summary {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin: 20px 0;
         }
-        
+
         .vuln-stat {
             background: #2a2a2a;
             padding: 15px;
             border-radius: 5px;
             text-align: center;
         }
-        
+
         .vuln-count {
             font-size: 24px;
             font-weight: bold;
             color: #00ffcc;
         }
-        
+
         .filter-controls {
             background: #1f1f1f;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
         }
-        
+
         .export-btn {
             background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             margin-left: 10px;
@@ -85,9 +84,10 @@
         <img src="YUSR-BLACK.png" alt="YUSR-TEC Logo" class="logo">
         <h1>التقارير الكاملة - YUSR-TEC</h1>
         <nav style="margin-top: 15px;">
-            <button onclick="window.location.href='index.html'" style="margin: 0 10px;">🏠 الصفحة الرئيسية</button>
-            <button onclick="window.location.href='reports.html'" class="ai-button">📊 التقارير</button>
-            <button onclick="window.location.href='hacker.html'" style="background: #ff0000; margin-left: 10px;">⚡ الاختراق الذكي</button>
+            <button onclick="window.location.href='index.html'" style="background: #666;">🏠 الصفحة الرئيسية</button>
+            <button onclick="window.location.href='reports.html'" class="ai-button">📊 التقارير الكاملة</button>
+            <button onclick="window.location.href='hacker.html'" style="background: #ff0000; margin: 0 10px;">⚡ الاختراق الذكي</button>
+            <button onclick="window.location.href='analysis.html'" style="background: #00aa00;">🧠 التحليل المتقدم</button>
         </nav>
     </div>
 
@@ -102,7 +102,7 @@
                 <option value="nikto">Nikto</option>
                 <option value="Manual">الأوامر اليدوية</option>
             </select>
-            
+
             <label>الفترة الزمنية:</label>
             <select id="filterTime">
                 <option value="all">كل الأوقات</option>
@@ -110,7 +110,7 @@
                 <option value="week">هذا الأسبوع</option>
                 <option value="month">هذا الشهر</option>
             </select>
-            
+
             <button onclick="filterReports()" style="margin: 10px 0;">🔍 تطبيق التصفية</button>
             <button onclick="exportReports()" class="export-btn">📤 تصدير التقارير</button>
         </div>
@@ -136,7 +136,7 @@
 
         <h2>📋 تقارير مفصلة</h2>
         <div id="detailedReports"></div>
-        
+
         <div style="text-align: center; margin: 30px 0;">
             <button onclick="loadReports()" class="ai-button">🔄 تحديث التقارير</button>
         </div>
