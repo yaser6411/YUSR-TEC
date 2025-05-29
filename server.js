@@ -943,8 +943,129 @@ function simulatePayloadExecution(payload) {
     return responses[Math.floor(Math.random() * responses.length)];
 }
 
+// Get hacked targets
+app.get('/api/targets', (req, res) => {
+    db.all(`SELECT * FROM commands WHERE output LIKE '%✅ نجح%' OR output LIKE '%vulnerability found%' OR output LIKE '%Login successful%' ORDER BY timestamp DESC`, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(rows);
+    });
+});
+
+// Save backdoor installation
+app.post('/api/install-backdoor', (req, res) => {
+    const { target, backdoorType, backdoorCode } = req.body;
+    
+    if (!target || !backdoorType) {
+        return res.status(400).json({ error: 'بيانات الباب الخلفي غير مكتملة' });
+    }
+    
+    const backdoorCommand = `AI Backdoor Installation on ${target}`;
+    const backdoorOutput = `🔐 Backdoor Type: ${backdoorType}\n📍 Target: ${target}\n⚡ Status: Installed Successfully\n🕒 Time: ${new Date().toLocaleString('ar-SA')}\n\n${backdoorCode || 'Backdoor code deployed'}`;
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['AI-Backdoor', backdoorCommand, backdoorOutput],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ success: true, id: this.lastID });
+        }
+    );
+});
+
+// Test backdoor connectivity
+app.post('/api/test-backdoor', (req, res) => {
+    const { target, backdoorId } = req.body;
+    
+    // Simulate backdoor testing
+    const testResult = Math.random() > 0.2 ? 'active' : 'inactive';
+    const testOutput = `🧪 Backdoor Test Results for ${target}:\n`;
+    testOutput += `Status: ${testResult === 'active' ? '✅ Active' : '❌ Inactive'}\n`;
+    testOutput += `Response Time: ${Math.floor(Math.random() * 500) + 100}ms\n`;
+    testOutput += `Last Contact: ${new Date().toLocaleString('ar-SA')}`;
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['Backdoor-Test', `Test backdoor ${backdoorId}`, testOutput],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ 
+                success: true, 
+                status: testResult,
+                id: this.lastID 
+            });
+        }
+    );
+});
+
+// Maintain backdoor access
+app.post('/api/maintain-access', (req, res) => {
+    const { target } = req.body;
+    
+    const maintenanceOutput = `🔧 Access Maintenance for ${target}:\n`;
+    maintenanceOutput += '✅ SSH keys refreshed\n';
+    maintenanceOutput += '✅ Web shells updated\n';
+    maintenanceOutput += '✅ Persistence mechanisms verified\n';
+    maintenanceOutput += '✅ Anti-detection measures applied\n';
+    maintenanceOutput += `🕒 Maintenance completed at: ${new Date().toLocaleString('ar-SA')}`;
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['Access-Maintenance', `Maintain access to ${target}`, maintenanceOutput],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ success: true, id: this.lastID });
+        }
+    );
+});
+
+// Auto-deploy backdoors
+app.post('/api/auto-deploy-backdoors', (req, res) => {
+    const { targets, backdoorType } = req.body;
+    
+    if (!targets || targets.length === 0) {
+        return res.status(400).json({ error: 'لا توجد أهداف للنشر عليها' });
+    }
+    
+    const deploymentOutput = `🤖 Auto-Backdoor Deployment Started:\n`;
+    deploymentOutput += `📊 Targets: ${targets.length}\n`;
+    deploymentOutput += `🔐 Backdoor Type: ${backdoorType}\n`;
+    deploymentOutput += `⚡ Deployment Strategy: Parallel\n\n`;
+    
+    targets.forEach((target, index) => {
+        deploymentOutput += `${index + 1}. ${target} - ✅ Deployed\n`;
+    });
+    
+    deploymentOutput += `\n🎯 Deployment completed successfully\n`;
+    deploymentOutput += `🕒 Time: ${new Date().toLocaleString('ar-SA')}`;
+    
+    db.run(
+        `INSERT INTO commands (tool, command, output) VALUES (?, ?, ?)`,
+        ['Auto-Backdoor', `Deploy ${backdoorType} to ${targets.length} targets`, deploymentOutput],
+        function (err) {
+            if (err) {
+                return res.status(500).json({ error: err.message });
+            }
+            res.json({ 
+                success: true, 
+                deployedCount: targets.length,
+                id: this.lastID 
+            });
+        }
+    );
+});
+
 app.listen(port, '0.0.0.0', () => {
     console.log(`🚀 السيرفر شغال على http://0.0.0.0:${port}`);
     console.log(`🤖 AI-Powered Bug Hunter & Creator Ready`);
     console.log(`🔴 AI Hacker Module Loaded`);
+    console.log(`👑 Target Management System Ready`);
+    console.log(`🔐 Auto-Backdoor Engine Active`);
 });
