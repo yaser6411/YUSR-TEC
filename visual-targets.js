@@ -617,6 +617,9 @@ function startVictimControl(targetAddress) {
     // Initialize victim monitoring
     initializeVictimMonitoring(targetAddress);
     
+    // Start screenshot capture simulation
+    startScreenshotCapture(targetAddress);
+    
     alert(`🎮 بدء التحكم في الضحية: ${targetAddress}`);
 }
 
@@ -710,13 +713,17 @@ function generateVictimDetails(targetAddress) {
 function startLiveMonitoring(targetAddress) {
     const screenElement = document.getElementById('victimScreen');
     
-    // Simulate live screen capture
+    // Simulate live screen capture with actual visual content
     let frameCount = 0;
+    let currentScreenshot = null;
+    
     const monitoringInterval = setInterval(() => {
         frameCount++;
         
-        if (frameCount % 5 === 0) {
-            // Simulate screen content change
+        // Generate a simulated screenshot every 3 seconds
+        if (frameCount % 3 === 0) {
+            currentScreenshot = generateSimulatedScreenshot();
+            
             const activities = [
                 '📧 يكتب رسالة إلكترونية',
                 '🌐 يتصفح موقع البنك',
@@ -729,14 +736,24 @@ function startLiveMonitoring(targetAddress) {
             ];
             
             const currentActivity = activities[Math.floor(Math.random() * activities.length)];
+            
             screenElement.innerHTML = `
-                <div style="text-align: center;">
-                    <div style="font-size: 24px; margin-bottom: 20px;">📺</div>
-                    <div style="font-size: 16px; color: #00ff00;">البث المباشر نشط</div>
-                    <div style="font-size: 14px; color: #fff; margin: 10px 0;">النشاط الحالي:</div>
-                    <div style="font-size: 18px; color: #ff4444;">${currentActivity}</div>
-                    <div style="margin-top: 20px; font-size: 12px; color: #888;">
-                        الإطار: ${frameCount} | FPS: 30 | الجودة: HD
+                <div style="position: relative; width: 100%; height: 100%;">
+                    <div style="position: absolute; top: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 5px; z-index: 10;">
+                        <div style="color: #00ff00; font-size: 12px;">🔴 البث المباشر نشط</div>
+                        <div style="color: #fff; font-size: 14px; margin: 5px 0;">${currentActivity}</div>
+                        <div style="color: #888; font-size: 10px;">الإطار: ${frameCount} | دقة: 1920x1080 | FPS: 30</div>
+                    </div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <div style="width: 300px; height: 200px; background: linear-gradient(45deg, #1a1a1a, #333); border: 2px solid #666; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                            <div style="color: #fff;">
+                                <div style="font-size: 48px; margin-bottom: 10px;">🖥️</div>
+                                <div style="font-size: 14px;">لقطة شاشة مباشرة</div>
+                                <div style="font-size: 12px; color: #888;">تم التقاط: ${new Date().toLocaleTimeString('ar-SA')}</div>
+                            </div>
+                        </div>
+                        <button onclick="captureCurrentScreen('${targetAddress}')" style="background: #ff0000; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">📸 التقاط لقطة</button>
+                        <button onclick="downloadCurrentScreen('${targetAddress}')" style="background: #0066cc; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">💾 حفظ الشاشة</button>
                     </div>
                 </div>
             `;
@@ -749,12 +766,16 @@ function startLiveMonitoring(targetAddress) {
 
 // Victim control functions
 function activateCamera() {
+    showCameraFeed();
     alert('📹 تم تفعيل الكاميرا بنجاح - جارٍ البث المباشر');
     logVictimAction('Camera activated');
 }
 
 function takeScreenshot() {
-    alert('📸 تم التقاط لقطة شاشة - حُفظت في ملف الأهداف');
+    const screenshot = captureScreenshot();
+    saveToVpicFolder(screenshot);
+    showScreenshotPreview(screenshot);
+    alert('📸 تم التقاط لقطة شاشة - تم حفظها في مجلد Vpic');
     logVictimAction('Screenshot captured');
 }
 
@@ -1298,6 +1319,269 @@ function calculateTotalSize(files) {
 // Close download manager
 function closeDownloadManager() {
     document.getElementById('downloadManager').style.display = 'none';
+}
+
+// Generate simulated screenshot
+function generateSimulatedScreenshot() {
+    return {
+        id: Date.now(),
+        timestamp: new Date().toLocaleString('ar-SA'),
+        filename: `screenshot_${Date.now()}.png`,
+        size: `${(Math.random() * 3 + 1).toFixed(1)} MB`,
+        resolution: '1920x1080',
+        type: 'desktop'
+    };
+}
+
+// Capture current screen
+function captureCurrentScreen(targetAddress) {
+    const screenshot = generateSimulatedScreenshot();
+    screenshot.target = targetAddress;
+    
+    // Add to captured data
+    if (!window.capturedScreenshots) {
+        window.capturedScreenshots = [];
+    }
+    window.capturedScreenshots.push(screenshot);
+    
+    // Show success message with preview
+    showScreenshotCaptured(screenshot);
+}
+
+// Download current screen
+function downloadCurrentScreen(targetAddress) {
+    const screenshot = generateSimulatedScreenshot();
+    screenshot.target = targetAddress;
+    
+    // Create download content
+    const content = `
+YUSR-TEC - لقطة شاشة مسروقة
+==========================
+
+الهدف: ${targetAddress}
+اسم الملف: ${screenshot.filename}
+التاريخ والوقت: ${screenshot.timestamp}
+الحجم: ${screenshot.size}
+الدقة: ${screenshot.resolution}
+النوع: ${screenshot.type}
+
+معلومات تقنية:
+==============
+- تم التقاط الشاشة من الضحية بنجاح
+- جودة الصورة: عالية (24 بت)
+- تنسيق الملف: PNG
+- مستوى الضغط: عالي
+- التشفير: AES-256
+
+محتوى الشاشة المكتشف:
+=====================
+- نوافذ مفتوحة: ${Math.floor(Math.random() * 5) + 1}
+- تطبيقات نشطة: ${Math.floor(Math.random() * 8) + 2}
+- معلومات حساسة: مكتشفة
+- كلمات مرور مرئية: ${Math.random() > 0.7 ? 'نعم' : 'لا'}
+- بيانات بنكية: ${Math.random() > 0.8 ? 'مكتشفة' : 'غير مكتشفة'}
+
+تعليمات الحفظ:
+==============
+1. احفظ هذا الملف في مجلد "Vpic"
+2. استخدم عارض الصور لمشاهدة المحتوى
+3. احتفظ بهذا التقرير كمرجع
+4. تأكد من تشفير الملفات الحساسة
+
+⚠️ تحذير: محتوى مسروق - استخدم بحذر
+`;
+
+    const blob = new Blob([content], { type: 'text/plain; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Vpic_${screenshot.filename.replace('.png', '.txt')}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert(`💾 تم حفظ لقطة الشاشة: ${screenshot.filename}`);
+}
+
+// Show screenshot captured notification
+function showScreenshotCaptured(screenshot) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #006600, #009900);
+        color: #fff;
+        padding: 15px 20px;
+        border-radius: 10px;
+        border: 2px solid #00ff00;
+        z-index: 9999;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        max-width: 350px;
+    `;
+    
+    notification.innerHTML = `
+        <div style="font-weight: bold; margin-bottom: 10px;">📸 تم التقاط لقطة شاشة بنجاح!</div>
+        <div style="font-size: 12px; margin: 5px 0;">اسم الملف: ${screenshot.filename}</div>
+        <div style="font-size: 12px; margin: 5px 0;">الحجم: ${screenshot.size}</div>
+        <div style="font-size: 12px; margin: 5px 0;">الوقت: ${screenshot.timestamp}</div>
+        <div style="margin-top: 10px;">
+            <button onclick="this.parentElement.parentElement.remove()" style="background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; font-size: 11px;">إغلاق</button>
+        </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Capture screenshot function
+function captureScreenshot() {
+    return generateSimulatedScreenshot();
+}
+
+// Save to Vpic folder
+function saveToVpicFolder(screenshot) {
+    if (!window.vpicFolder) {
+        window.vpicFolder = [];
+    }
+    window.vpicFolder.push(screenshot);
+    
+    console.log(`💾 Saved to Vpic folder: ${screenshot.filename}`);
+}
+
+// Show screenshot preview
+function showScreenshotPreview(screenshot) {
+    const preview = document.createElement('div');
+    preview.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #000;
+        border: 3px solid #00ff00;
+        border-radius: 10px;
+        padding: 20px;
+        z-index: 10000;
+        max-width: 500px;
+        color: #fff;
+    `;
+    
+    preview.innerHTML = `
+        <h3 style="color: #00ff00; margin-bottom: 15px;">📸 معاينة لقطة الشاشة</h3>
+        <div style="background: #222; border: 2px dashed #666; padding: 40px; text-align: center; margin: 15px 0;">
+            <div style="font-size: 48px; margin-bottom: 10px;">🖼️</div>
+            <div style="font-size: 16px; margin-bottom: 10px;">${screenshot.filename}</div>
+            <div style="font-size: 12px; color: #888;">الحجم: ${screenshot.size} | الدقة: ${screenshot.resolution}</div>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="downloadScreenshotFile('${screenshot.filename}')" style="background: #0066cc; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">💾 تحميل</button>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: #666; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">إغلاق</button>
+        </div>
+    `;
+    
+    document.body.appendChild(preview);
+}
+
+// Show camera feed
+function showCameraFeed() {
+    const cameraFeed = document.createElement('div');
+    cameraFeed.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 300px;
+        height: 200px;
+        background: #000;
+        border: 3px solid #ff0000;
+        border-radius: 10px;
+        z-index: 9998;
+        overflow: hidden;
+    `;
+    
+    cameraFeed.innerHTML = `
+        <div style="position: relative; width: 100%; height: 100%;">
+            <div style="position: absolute; top: 5px; left: 5px; color: #ff0000; font-size: 12px; background: rgba(0,0,0,0.7); padding: 3px 6px; border-radius: 3px;">🔴 LIVE</div>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #fff;">
+                <div style="font-size: 48px; margin-bottom: 10px;">📹</div>
+                <div style="font-size: 14px;">بث مباشر من الكاميرا</div>
+                <div style="font-size: 12px; color: #888; margin-top: 5px;">720p @ 30fps</div>
+            </div>
+            <div style="position: absolute; bottom: 5px; right: 5px;">
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: #ff0000; color: #fff; border: none; padding: 3px 8px; border-radius: 3px; font-size: 11px;">إغلاق</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(cameraFeed);
+}
+
+// Download screenshot file
+function downloadScreenshotFile(filename) {
+    const content = `
+YUSR-TEC - Screenshot Data
+=========================
+
+Filename: ${filename}
+Captured: ${new Date().toLocaleString('ar-SA')}
+Format: PNG
+Quality: High
+Size: ${(Math.random() * 3 + 1).toFixed(1)} MB
+
+This file represents a captured screenshot from the target device.
+The actual image data would be stored in binary format.
+
+⚠️ Warning: This is simulated data for educational purposes only.
+`;
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename.replace('.png', '_data.txt');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert(`📥 تم تحميل ملف البيانات: ${filename}`);
+}
+
+// Start screenshot capture system
+function startScreenshotCapture(targetAddress) {
+    // Auto-capture screenshots every 30 seconds
+    setInterval(() => {
+        if (Math.random() > 0.7) { // 30% chance every 30 seconds
+            const screenshot = captureScreenshot();
+            screenshot.target = targetAddress;
+            saveToVpicFolder(screenshot);
+            
+            // Show brief notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(0, 255, 0, 0.1);
+                border: 1px solid #00ff00;
+                color: #00ff00;
+                padding: 10px;
+                border-radius: 5px;
+                z-index: 9999;
+                font-size: 12px;
+            `;
+            notification.textContent = `📸 Auto-captured: ${screenshot.filename}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+    }, 30000);
 }
 
 // Cleanup function when leaving page
