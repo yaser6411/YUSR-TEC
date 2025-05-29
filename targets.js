@@ -203,6 +203,10 @@ function createTargetCard(target) {
                 `).join('')}
             </div>
         </div>
+        
+        <div style="margin-top: 15px; text-align: center;">
+            <button onclick="viewTargetDetails('${target.address}')" style="background: #0066cc; color: #fff; padding: 8px 16px; border: none; border-radius: 5px; margin: 5px;">🎯 عرض التفاصيل الكاملة</button>
+        </div>
     `;
     
     return card;
@@ -587,4 +591,8 @@ function clearAllTargets() {
         updateStats();
         alert('🗑️ تم حذف جميع الأهداف');
     }
+}
+
+function viewTargetDetails(targetAddress) {
+    window.location.href = `target-details.html?target=${encodeURIComponent(targetAddress)}`;
 }

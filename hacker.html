@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -15,7 +14,7 @@
             margin: 20px 0;
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
-        
+
         .danger-warning {
             background: #ff4444;
             color: #fff;
@@ -25,7 +24,7 @@
             text-align: center;
             font-weight: bold;
         }
-        
+
         .target-input {
             width: 100%;
             padding: 12px;
@@ -35,7 +34,7 @@
             border-radius: 5px;
             margin: 10px 0;
         }
-        
+
         .hack-button {
             background: linear-gradient(45deg, #ff0000, #ff4444);
             color: #fff;
@@ -48,12 +47,12 @@
             margin: 10px 5px;
             transition: all 0.3s;
         }
-        
+
         .hack-button:hover {
             background: linear-gradient(45deg, #ff4444, #ff6666);
             transform: scale(1.05);
         }
-        
+
         .exploit-output {
             background: #000;
             border: 2px solid #ff0000;
@@ -66,7 +65,7 @@
             overflow-y: auto;
             margin: 20px 0;
         }
-        
+
         .payload-section {
             background: #1a0000;
             border: 1px solid #ff4444;
@@ -74,14 +73,14 @@
             padding: 20px;
             margin: 15px 0;
         }
-        
+
         .attack-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin: 20px 0;
         }
-        
+
         .stat-box {
             background: #2a0000;
             padding: 15px;
@@ -89,7 +88,7 @@
             text-align: center;
             border: 1px solid #ff4444;
         }
-        
+
         .stat-value {
             font-size: 24px;
             color: #ff0000;
@@ -106,6 +105,8 @@
             <button onclick="window.location.href='reports.html'" style="background: #666; margin: 0 10px;">📊 التقارير</button>
             <button onclick="window.location.href='hacker.html'" class="hack-button">⚡ الاختراق الذكي</button>
             <button onclick="window.location.href='targets.html'" style="background: #ff6600; margin: 0 10px;">👑 الأهداف المخترقة</button>
+            <button onclick="window.location.href='analysis.html'" style="background: #cc00cc; margin: 0 10px;">🧠 التحليل المتقدم</button>
+            <button onclick="window.location.href='target-details.html'" style="background: #0066cc; margin: 0 10px;">🎯 تفاصيل الهدف</button>
         </nav>
     </div>
 
@@ -125,10 +126,10 @@
                 <option value="mobile">📱 تطبيق جوال</option>
                 <option value="iot">🏠 جهاز IoT</option>
             </select>
-            
+
             <label>الهدف:</label>
             <input type="text" id="hackTarget" class="target-input" placeholder="مثال: 192.168.1.1 أو example.com">
-            
+
             <label>نوع الهجوم:</label>
             <select id="attackType" class="target-input">
                 <option value="auto">🤖 تلقائي - دع الAI يختار</option>
@@ -141,7 +142,7 @@
                 <option value="mitm">🕸️ هجوم الوسط</option>
                 <option value="privilege-escalation">⬆️ تصعيد الصلاحيات</option>
             </select>
-            
+
             <button onclick="startAIHack()" class="hack-button">🚀 بدء الهجوم الذكي</button>
             <button onclick="generatePayloads()" class="hack-button">🧨 إنشاء حمولات</button>
             <button onclick="clearResults()" style="background: #666;">🧹 مسح النتائج</button>
@@ -172,7 +173,7 @@
         </div>
 
         <div class="exploit-output" id="hackOutput" style="display: none;"></div>
-        
+
         <div style="text-align: center; margin: 30px 0;">
             <button onclick="exportHackReport()" style="background: #ff6600; color: #fff; padding: 12px 25px; border: none; border-radius: 5px;">📤 تصدير تقرير الاختراق</button>
         </div>

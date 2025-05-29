@@ -1,4 +1,3 @@
-
 const apiUrl = '/api';
 
 let visualTargets = [];
@@ -8,11 +7,11 @@ let scanAnimation = null;
 // Initialize the visual display
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🌐 YUSR-TEC Visual Target Display Loaded');
-    
+
     loadVisualTargets();
     createMatrixBackground();
     startRealTimeUpdates();
-    
+
     // Initialize statistics
     updateLiveStats();
 });
@@ -34,7 +33,7 @@ function loadVisualTargets() {
 // Parse targets from commands for visual display
 function parseTargetsForVisual(commands) {
     visualTargets = [];
-    
+
     commands.forEach(command => {
         if (command.output && (
             command.output.includes('✅ نجح') ||
@@ -49,7 +48,7 @@ function parseTargetsForVisual(commands) {
             }
         }
     });
-    
+
     // Add some simulated high-value targets for demonstration
     if (visualTargets.length < 5) {
         addSimulatedTargets();
@@ -60,17 +59,17 @@ function parseTargetsForVisual(commands) {
 function createVisualTarget(command) {
     const output = command.output;
     const commandText = command.command;
-    
+
     // Extract address
     const ipRegex = /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/g;
     const domainRegex = /(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})/g;
-    
+
     let address = '';
     let type = 'unknown';
-    
+
     const ipMatch = output.match(ipRegex) || commandText.match(ipRegex);
     const domainMatch = output.match(domainRegex) || commandText.match(domainRegex);
-    
+
     if (ipMatch) {
         address = ipMatch[0];
         type = 'server';
@@ -78,25 +77,25 @@ function createVisualTarget(command) {
         address = domainMatch[0].replace(/https?:\/\//, '').replace(/www\./, '');
         type = 'website';
     }
-    
+
     if (!address) return null;
-    
+
     // Determine threat level and value
     let threatLevel = 'medium';
     let isHighValue = false;
     let hasBackdoor = false;
-    
+
     if (output.includes('admin') || output.includes('database') || output.includes('root')) {
         threatLevel = 'critical';
         isHighValue = true;
     } else if (output.includes('SQL injection') || output.includes('shell')) {
         threatLevel = 'high';
     }
-    
+
     if (output.includes('backdoor') || output.includes('persistent')) {
         hasBackdoor = true;
     }
-    
+
     return {
         id: Date.now() + Math.random(),
         address: address,
@@ -128,16 +127,16 @@ function extractVulnerabilities(output) {
 function extractSystemInfo(output) {
     let os = 'Unknown';
     let services = [];
-    
+
     if (output.includes('Linux') || output.includes('Ubuntu')) os = 'Linux';
     else if (output.includes('Windows')) os = 'Windows';
     else if (output.includes('Apache')) os = 'Web Server';
-    
+
     if (output.includes('22') || output.includes('SSH')) services.push('SSH');
     if (output.includes('80') || output.includes('HTTP')) services.push('HTTP');
     if (output.includes('443') || output.includes('HTTPS')) services.push('HTTPS');
     if (output.includes('3306') || output.includes('MySQL')) services.push('MySQL');
-    
+
     return { os, services };
 }
 
@@ -185,23 +184,23 @@ function addSimulatedTargets() {
             activeSessions: 2
         }
     ];
-    
+
     visualTargets.push(...simulated);
 }
 
 // Display network map with targets
 function displayNetworkMap() {
     const map = document.getElementById('networkMap');
-    
+
     // Clear existing nodes
     const existingNodes = map.querySelectorAll('.target-node');
     existingNodes.forEach(node => node.remove());
-    
+
     visualTargets.forEach((target, index) => {
         const node = createTargetNode(target, index);
         map.appendChild(node);
     });
-    
+
     // Create connection lines
     setTimeout(createConnectionLines, 500);
 }
@@ -211,28 +210,28 @@ function createTargetNode(target, index) {
     const node = document.createElement('div');
     node.className = 'target-node';
     node.id = `target-${target.id}`;
-    
+
     // Add special classes
     if (target.isHighValue) node.classList.add('high-value');
     if (target.hasBackdoor) node.classList.add('persistent');
-    
+
     // Position randomly on the map
     const mapRect = document.getElementById('networkMap').getBoundingClientRect();
     const x = Math.random() * (mapRect.width - 140) + 20;
     const y = Math.random() * (mapRect.height - 140) + 50;
-    
+
     node.style.left = x + 'px';
     node.style.top = y + 'px';
-    
+
     node.innerHTML = `
         <div class="threat-level threat-${target.threatLevel}">${target.threatLevel.toUpperCase()}</div>
         <div class="node-icon">${getTargetIcon(target.type)}</div>
         <div class="node-address">${target.address}</div>
         ${target.hasBackdoor ? '<div class="backdoor-indicator"></div>' : ''}
     `;
-    
+
     node.onclick = () => showTargetDetails(target);
-    
+
     return node;
 }
 
@@ -252,11 +251,11 @@ function getTargetIcon(type) {
 function createConnectionLines() {
     const map = document.getElementById('networkMap');
     const nodes = map.querySelectorAll('.target-node');
-    
+
     // Remove existing lines
     const existingLines = map.querySelectorAll('.connection-line');
     existingLines.forEach(line => line.remove());
-    
+
     // Create lines between some nodes
     for (let i = 0; i < nodes.length - 1; i++) {
         if (Math.random() > 0.6) { // 40% chance to create connection
@@ -270,24 +269,24 @@ function createConnectionLines() {
 function createConnectionLine(node1, node2) {
     const line = document.createElement('div');
     line.className = 'connection-line';
-    
+
     const rect1 = node1.getBoundingClientRect();
     const rect2 = node2.getBoundingClientRect();
     const mapRect = document.getElementById('networkMap').getBoundingClientRect();
-    
+
     const x1 = rect1.left - mapRect.left + rect1.width / 2;
     const y1 = rect1.top - mapRect.top + rect1.height / 2;
     const x2 = rect2.left - mapRect.left + rect2.width / 2;
     const y2 = rect2.top - mapRect.top + rect2.height / 2;
-    
+
     const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
     const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
-    
+
     line.style.left = x1 + 'px';
     line.style.top = y1 + 'px';
     line.style.width = length + 'px';
     line.style.transform = `rotate(${angle}deg)`;
-    
+
     return line;
 }
 
@@ -296,11 +295,11 @@ function showTargetDetails(target) {
     selectedTarget = target;
     const modal = document.getElementById('targetModal');
     const content = document.getElementById('modalContent');
-    
+
     content.innerHTML = `
         <h2>${getTargetIcon(target.type)} ${target.address}</h2>
         <div style="color: #888; margin-bottom: 20px;">تم الاختراق: ${target.compromisedAt.toLocaleString('ar-SA')}</div>
-        
+
         <div class="vulnerability-chart">
             <h3>🔍 الثغرات المكتشفة</h3>
             ${target.vulnerabilities.map(vuln => `
@@ -315,7 +314,7 @@ function showTargetDetails(target) {
                 </div>
             `).join('')}
         </div>
-        
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
             <div style="background: #111; padding: 15px; border-radius: 8px;">
                 <h4>💻 معلومات النظام</h4>
@@ -330,7 +329,7 @@ function showTargetDetails(target) {
                 <div>مستوى التهديد: ${target.threatLevel}</div>
             </div>
         </div>
-        
+
         <div style="background: #0a0a0a; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <h4>🎯 الإجراءات المتاحة</h4>
             <button onclick="executeRemoteCommand('${target.address}')" style="background: #ff4444; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">💻 تنفيذ أوامر</button>
@@ -339,7 +338,7 @@ function showTargetDetails(target) {
             <button onclick="coverTracks('${target.address}')" style="background: #333; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">👻 إخفاء الأثر</button>
             <button onclick="startVictimControl('${target.address}')" style="background: #ff0000; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">🎮 التحكم في الضحية</button>
         </div>
-        
+
         ${target.hasBackdoor ? `
             <div style="background: #001100; border: 1px solid #00aa00; padding: 15px; border-radius: 8px;">
                 <h4>🔐 الأبواب الخلفية النشطة</h4>
@@ -351,7 +350,7 @@ function showTargetDetails(target) {
             </div>
         ` : ''}
     `;
-    
+
     modal.style.display = 'block';
 }
 
@@ -366,7 +365,7 @@ function updateLiveStats() {
     const activeSessions = visualTargets.reduce((sum, t) => sum + t.activeSessions, 0);
     const dataExfiltrated = visualTargets.reduce((sum, t) => sum + t.dataExfiltrated, 0);
     const exploitsUsed = visualTargets.reduce((sum, t) => sum + t.vulnerabilities.length, 0);
-    
+
     document.getElementById('totalHacked').textContent = totalHacked;
     document.getElementById('activeSessions').textContent = activeSessions;
     document.getElementById('dataExfiltrated').textContent = dataExfiltrated.toFixed(1) + ' GB';
@@ -377,7 +376,7 @@ function updateLiveStats() {
 function updateAttackTimeline() {
     const timeline = document.getElementById('attackTimeline');
     timeline.innerHTML = '';
-    
+
     // Create timeline items from recent activities
     const activities = [
         '🎯 نجح اختراق corporate-server.com',
@@ -387,7 +386,7 @@ function updateAttackTimeline() {
         '👻 تم تفعيل وضع التخفي لتجنب الكشف',
         '⚡ بدء هجوم جماعي على 5 أهداف جديدة'
     ];
-    
+
     activities.forEach((activity, index) => {
         const item = document.createElement('div');
         item.className = 'timeline-item';
@@ -410,40 +409,40 @@ function createMatrixBackground() {
     canvas.style.pointerEvents = 'none';
     canvas.style.zIndex = '-1';
     canvas.style.opacity = '0.1';
-    
+
     document.getElementById('matrixBg').appendChild(canvas);
-    
+
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
+
     const chars = '01';
     const charSize = 14;
     const columns = canvas.width / charSize;
     const drops = [];
-    
+
     for (let i = 0; i < columns; i++) {
         drops[i] = 1;
     }
-    
+
     function drawMatrix() {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
+
         ctx.fillStyle = '#00ff41';
         ctx.font = charSize + 'px monospace';
-        
+
         for (let i = 0; i < drops.length; i++) {
             const text = chars[Math.floor(Math.random() * chars.length)];
             ctx.fillText(text, i * charSize, drops[i] * charSize);
-            
+
             if (drops[i] * charSize > canvas.height && Math.random() > 0.975) {
                 drops[i] = 0;
             }
             drops[i]++;
         }
     }
-    
+
     setInterval(drawMatrix, 100);
 }
 
@@ -451,12 +450,12 @@ function createMatrixBackground() {
 function startRealTimeUpdates() {
     setInterval(() => {
         updateLiveStats();
-        
+
         // Simulate new activities
         if (Math.random() > 0.8) {
             simulateNewActivity();
         }
-        
+
         // Update node animations
         updateNodeAnimations();
     }, 5000);
@@ -470,10 +469,10 @@ function simulateNewActivity() {
         'تم تسريب المزيد من البيانات',
         'تحديث الأبواب الخلفية'
     ];
-    
+
     const activity = activities[Math.floor(Math.random() * activities.length)];
     console.log('🔄 نشاط جديد:', activity);
-    
+
     // Update a random target's data
     if (visualTargets.length > 0) {
         const randomTarget = visualTargets[Math.floor(Math.random() * visualTargets.length)];
@@ -498,7 +497,7 @@ function updateNodeAnimations() {
 // Control panel functions
 function scanForNewTargets() {
     alert('🔍 بدء البحث عن أهداف جديدة...');
-    
+
     setTimeout(() => {
         const newTarget = {
             id: Date.now(),
@@ -514,7 +513,7 @@ function scanForNewTargets() {
             dataExfiltrated: Math.floor(Math.random() * 50),
             activeSessions: 1
         };
-        
+
         visualTargets.push(newTarget);
         displayNetworkMap();
         updateLiveStats();
@@ -524,12 +523,12 @@ function scanForNewTargets() {
 
 function launchMassAttack() {
     alert('⚡ بدء الهجوم الجماعي على جميع الأهداف...');
-    
+
     visualTargets.forEach(target => {
         target.activeSessions += Math.floor(Math.random() * 3) + 1;
         target.dataExfiltrated += Math.floor(Math.random() * 20) + 5;
     });
-    
+
     setTimeout(() => {
         updateLiveStats();
         alert('✅ تم تنفيذ الهجوم الجماعي بنجاح');
@@ -542,7 +541,7 @@ function activateStealthMode() {
 
 function exportNetworkMap() {
     const report = generateNetworkReport();
-    
+
     const blob = new Blob([report], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -609,30 +608,30 @@ function coverTracks(target) {
 function startVictimControl(targetAddress) {
     console.log(`🎮 Starting victim control for ${targetAddress}`);
     closeTargetModal();
-    
+
     // Show control panels
     document.getElementById('victimControlPanel').style.display = 'block';
     document.getElementById('victimMonitor').style.display = 'block';
-    
+
     // Initialize victim monitoring
     initializeVictimMonitoring(targetAddress);
-    
+
     // Start screenshot capture simulation
     startScreenshotCapture(targetAddress);
-    
+
     alert(`🎮 بدء التحكم في الضحية: ${targetAddress}`);
 }
 
 // Initialize victim monitoring
 function initializeVictimMonitoring(targetAddress) {
     const victimInfo = document.getElementById('victimDetailsContent');
-    
+
     // Generate detailed victim information
     const victimDetails = generateVictimDetails(targetAddress);
-    
+
     victimInfo.innerHTML = `
         <div style="color: #ff0000; font-weight: bold; margin-bottom: 15px;">🎯 الهدف: ${targetAddress}</div>
-        
+
         <div style="margin: 10px 0;">
             <strong>📱 نوع الجهاز:</strong> ${victimDetails.deviceType}
         </div>
@@ -651,7 +650,7 @@ function initializeVictimMonitoring(targetAddress) {
         <div style="margin: 10px 0;">
             <strong>🕒 آخر نشاط:</strong> ${victimDetails.lastActivity}
         </div>
-        
+
         <div style="background: #222; padding: 10px; border-radius: 5px; margin: 15px 0;">
             <strong>🔍 الأجهزة المتاحة:</strong>
             <div style="margin: 5px 0;">
@@ -667,7 +666,7 @@ function initializeVictimMonitoring(targetAddress) {
                 ⌨️ لوحة المفاتيح: ${victimDetails.devices.keyboard ? '✅ متاحة' : '❌ غير متاحة'}
             </div>
         </div>
-        
+
         <div style="background: #001100; border: 1px solid #00ff00; padding: 10px; border-radius: 5px; margin: 15px 0;">
             <strong>📊 إحصائيات المراقبة:</strong>
             <div style="margin: 5px 0;">📸 لقطات التقطت: ${victimDetails.stats.screenshots}</div>
@@ -676,7 +675,7 @@ function initializeVictimMonitoring(targetAddress) {
             <div style="margin: 5px 0;">🖱️ نقرات الماوس: ${victimDetails.stats.mouseClicks}</div>
         </div>
     `;
-    
+
     // Start live monitoring simulation
     startLiveMonitoring(targetAddress);
 }
@@ -686,7 +685,7 @@ function generateVictimDetails(targetAddress) {
     const devices = ['Windows PC', 'MacBook Pro', 'Linux Workstation', 'Android Phone', 'iPhone'];
     const browsers = ['Chrome 120.0', 'Firefox 121.0', 'Safari 17.2', 'Edge 120.0'];
     const locations = ['New York, USA', 'London, UK', 'Tokyo, Japan', 'Berlin, Germany', 'Sydney, Australia'];
-    
+
     return {
         deviceType: devices[Math.floor(Math.random() * devices.length)],
         os: selectedTarget?.systemInfo?.os || 'Windows 11',
@@ -712,18 +711,18 @@ function generateVictimDetails(targetAddress) {
 // Start live monitoring simulation
 function startLiveMonitoring(targetAddress) {
     const screenElement = document.getElementById('victimScreen');
-    
+
     // Simulate live screen capture with actual visual content
     let frameCount = 0;
     let currentScreenshot = null;
-    
+
     const monitoringInterval = setInterval(() => {
         frameCount++;
-        
+
         // Generate a simulated screenshot every 3 seconds
         if (frameCount % 3 === 0) {
             currentScreenshot = generateSimulatedScreenshot();
-            
+
             const activities = [
                 '📧 يكتب رسالة إلكترونية',
                 '🌐 يتصفح موقع البنك',
@@ -734,9 +733,9 @@ function startLiveMonitoring(targetAddress) {
                 '🔑 يدخل كلمات مرور',
                 '💳 يدخل بيانات بطاقة ائتمان'
             ];
-            
+
             const currentActivity = activities[Math.floor(Math.random() * activities.length)];
-            
+
             screenElement.innerHTML = `
                 <div style="position: relative; width: 100%; height: 100%;">
                     <div style="position: absolute; top: 10px; left: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 10px; border-radius: 5px; z-index: 10;">
@@ -759,7 +758,7 @@ function startLiveMonitoring(targetAddress) {
             `;
         }
     }, 1000);
-    
+
     // Store interval for cleanup
     window.victimMonitoringInterval = monitoringInterval;
 }
@@ -839,7 +838,7 @@ function disableKeyboard() {
 function logVictimAction(action) {
     const timestamp = new Date().toLocaleString('ar-SA');
     console.log(`🎯 [${timestamp}] Victim Action: ${action}`);
-    
+
     // Update victim stats
     if (selectedTarget) {
         selectedTarget.activeSessions += 1;
@@ -858,10 +857,10 @@ window.onclick = function(event) {
 // Download target data functionality
 function downloadTargetData(targetAddress) {
     console.log(`📥 Opening download manager for ${targetAddress}`);
-    
+
     // Show download manager
     document.getElementById('downloadManager').style.display = 'block';
-    
+
     // Generate and display captured data
     generateCapturedData(targetAddress);
 }
@@ -869,7 +868,7 @@ function downloadTargetData(targetAddress) {
 // Generate captured surveillance data
 function generateCapturedData(targetAddress) {
     const currentTime = new Date().toLocaleString('ar-SA');
-    
+
     // Generate images and videos data
     const imagesData = [
         { name: 'screenshot_desktop_001.png', size: '2.4 MB', time: currentTime, type: 'screenshot' },
@@ -881,7 +880,7 @@ function generateCapturedData(targetAddress) {
         { name: 'login_page_capture.png', size: '876 KB', time: currentTime, type: 'screenshot' },
         { name: 'banking_session.png', size: '1.9 MB', time: currentTime, type: 'screenshot' }
     ];
-    
+
     // Generate input monitoring data
     const inputData = [
         { name: 'keylogger_session_001.txt', size: '156 KB', time: currentTime, type: 'keylog', content: 'Keyboard inputs captured' },
@@ -892,7 +891,7 @@ function generateCapturedData(targetAddress) {
         { name: 'browser_history.json', size: '234 KB', time: currentTime, type: 'browser', content: 'Browser activity' },
         { name: 'microphone_recording.wav', size: '8.9 MB', time: currentTime, type: 'audio', content: 'Audio surveillance' }
     ];
-    
+
     // Display images data
     const imagesContainer = document.getElementById('capturedImages');
     imagesContainer.innerHTML = `
@@ -907,7 +906,7 @@ function generateCapturedData(targetAddress) {
             </div>
         `).join('')}
     `;
-    
+
     // Display input data
     const inputContainer = document.getElementById('inputData');
     inputContainer.innerHTML = `
@@ -922,7 +921,7 @@ function generateCapturedData(targetAddress) {
             </div>
         `).join('')}
     `;
-    
+
     // Store data globally for download
     window.currentCapturedData = {
         target: targetAddress,
@@ -952,7 +951,7 @@ function getFileIcon(type) {
 // Preview captured file
 function previewFile(filename, type) {
     let previewContent = '';
-    
+
     switch (type) {
         case 'screenshot':
         case 'webcam':
@@ -1024,7 +1023,7 @@ function previewFile(filename, type) {
                 </div>
             `;
     }
-    
+
     alert(`معاينة الملف:\n\n${filename}\nنوع: ${type}\n\nاستخدم زر التحميل للحصول على الملف الكامل`);
 }
 
@@ -1035,10 +1034,10 @@ function downloadFolder(folderName) {
         alert('❌ لا توجد بيانات للتحميل');
         return;
     }
-    
+
     let filesToDownload = [];
     let folderContent = '';
-    
+
     if (folderName === 'Vpic') {
         filesToDownload = data.images;
         folderContent = generateVpicFolderContent(data);
@@ -1046,7 +1045,7 @@ function downloadFolder(folderName) {
         filesToDownload = data.inputs;
         folderContent = generateShowCoFolderContent(data);
     }
-    
+
     // Create and download the folder content as a text file
     const blob = new Blob([folderContent], { type: 'text/plain; charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -1057,7 +1056,7 @@ function downloadFolder(folderName) {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
+
     alert(`📥 تم تحميل مجلد ${folderName} بنجاح!\nعدد الملفات: ${filesToDownload.length}\nالهدف: ${data.target}`);
 }
 
@@ -1188,9 +1187,9 @@ function downloadAllData() {
         alert('❌ لا توجد بيانات للتحميل');
         return;
     }
-    
+
     const allDataContent = generateCompleteReport(data);
-    
+
     const blob = new Blob([allDataContent], { type: 'text/plain; charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -1200,7 +1199,7 @@ function downloadAllData() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
+
     alert(`📦 تم تحميل جميع البيانات بنجاح!\nإجمالي الملفات: ${data.images.length + data.inputs.length}\nالهدف: ${data.target}`);
 }
 
@@ -1208,7 +1207,7 @@ function downloadAllData() {
 function generateCompleteReport(data) {
     const vpicContent = generateVpicFolderContent(data);
     const showCoContent = generateShowCoFolderContent(data);
-    
+
     let content = `
 ████████████████████████████████████████████████████████████
 █                                                          █
@@ -1308,7 +1307,7 @@ function calculateTotalSize(files) {
             totalMB += parseFloat(size.replace(' GB', '')) * 1024;
         }
     });
-    
+
     if (totalMB > 1024) {
         return `${(totalMB / 1024).toFixed(2)} GB`;
     } else {
@@ -1337,13 +1336,13 @@ function generateSimulatedScreenshot() {
 function captureCurrentScreen(targetAddress) {
     const screenshot = generateSimulatedScreenshot();
     screenshot.target = targetAddress;
-    
+
     // Add to captured data
     if (!window.capturedScreenshots) {
         window.capturedScreenshots = [];
     }
     window.capturedScreenshots.push(screenshot);
-    
+
     // Show success message with preview
     showScreenshotCaptured(screenshot);
 }
@@ -1352,7 +1351,7 @@ function captureCurrentScreen(targetAddress) {
 function downloadCurrentScreen(targetAddress) {
     const screenshot = generateSimulatedScreenshot();
     screenshot.target = targetAddress;
-    
+
     // Create download content
     const content = `
 YUSR-TEC - لقطة شاشة مسروقة
@@ -1400,7 +1399,7 @@ YUSR-TEC - لقطة شاشة مسروقة
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
+
     alert(`💾 تم حفظ لقطة الشاشة: ${screenshot.filename}`);
 }
 
@@ -1420,7 +1419,7 @@ function showScreenshotCaptured(screenshot) {
         box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
         max-width: 350px;
     `;
-    
+
     notification.innerHTML = `
         <div style="font-weight: bold; margin-bottom: 10px;">📸 تم التقاط لقطة شاشة بنجاح!</div>
         <div style="font-size: 12px; margin: 5px 0;">اسم الملف: ${screenshot.filename}</div>
@@ -1430,9 +1429,9 @@ function showScreenshotCaptured(screenshot) {
             <button onclick="this.parentElement.parentElement.remove()" style="background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; font-size: 11px;">إغلاق</button>
         </div>
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     // Auto remove after 5 seconds
     setTimeout(() => {
         if (notification.parentElement) {
@@ -1452,7 +1451,7 @@ function saveToVpicFolder(screenshot) {
         window.vpicFolder = [];
     }
     window.vpicFolder.push(screenshot);
-    
+
     console.log(`💾 Saved to Vpic folder: ${screenshot.filename}`);
 }
 
@@ -1472,7 +1471,7 @@ function showScreenshotPreview(screenshot) {
         max-width: 500px;
         color: #fff;
     `;
-    
+
     preview.innerHTML = `
         <h3 style="color: #00ff00; margin-bottom: 15px;">📸 معاينة لقطة الشاشة</h3>
         <div style="background: #222; border: 2px dashed #666; padding: 40px; text-align: center; margin: 15px 0;">
@@ -1485,7 +1484,7 @@ function showScreenshotPreview(screenshot) {
             <button onclick="this.parentElement.parentElement.remove()" style="background: #666; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">إغلاق</button>
         </div>
     `;
-    
+
     document.body.appendChild(preview);
 }
 
@@ -1504,7 +1503,7 @@ function showCameraFeed() {
         z-index: 9998;
         overflow: hidden;
     `;
-    
+
     cameraFeed.innerHTML = `
         <div style="position: relative; width: 100%; height: 100%;">
             <div style="position: absolute; top: 5px; left: 5px; color: #ff0000; font-size: 12px; background: rgba(0,0,0,0.7); padding: 3px 6px; border-radius: 3px;">🔴 LIVE</div>
@@ -1518,7 +1517,7 @@ function showCameraFeed() {
             </div>
         </div>
     `;
-    
+
     document.body.appendChild(cameraFeed);
 }
 
@@ -1539,7 +1538,7 @@ The actual image data would be stored in binary format.
 
 ⚠️ Warning: This is simulated data for educational purposes only.
 `;
-    
+
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -1549,7 +1548,7 @@ The actual image data would be stored in binary format.
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
+
     alert(`📥 تم تحميل ملف البيانات: ${filename}`);
 }
 
@@ -1561,7 +1560,7 @@ function startScreenshotCapture(targetAddress) {
             const screenshot = captureScreenshot();
             screenshot.target = targetAddress;
             saveToVpicFolder(screenshot);
-            
+
             // Show brief notification
             const notification = document.createElement('div');
             notification.style.cssText = `
@@ -1578,7 +1577,7 @@ function startScreenshotCapture(targetAddress) {
             `;
             notification.textContent = `📸 Auto-captured: ${screenshot.filename}`;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => notification.remove(), 3000);
         }
     }, 30000);
@@ -1590,3 +1589,16 @@ window.addEventListener('beforeunload', function() {
         clearInterval(window.victimMonitoringInterval);
     }
 });
+
+// Function to view target details from visual targets
+function viewTargetDetails(targetAddress) {
+    // Find the target in the visualTargets array
+    const target = visualTargets.find(t => t.address === targetAddress);
+
+    if (target) {
+        // Open the target details modal
+        showTargetDetails(target);
+    } else {
+        alert(`Target with address ${targetAddress} not found.`);
+    }
+}

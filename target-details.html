@@ -1,0 +1,394 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YUSR-TEC - تفاصيل الهدف المتقدمة</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .details-container {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            border: 2px solid #00ff00;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        .target-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #1a0000, #2a0000);
+            border: 2px solid #ff4444;
+            border-radius: 12px;
+        }
+        
+        .target-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #00ff00;
+        }
+        
+        .location-map {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 300px;
+            position: relative;
+        }
+        
+        .real-time-analytics {
+            background: linear-gradient(135deg, #001a33, #003366);
+            border: 2px solid #0066cc;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .analytics-chart {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 200px;
+        }
+        
+        .live-data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .data-item {
+            background: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .data-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff4444;
+            margin: 10px 0;
+        }
+        
+        .vulnerability-timeline {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .timeline-item {
+            background: #1a1a1a;
+            border-left: 4px solid #ff4444;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '🎯';
+            position: absolute;
+            left: -15px;
+            top: 15px;
+            background: #ff4444;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .network-topology {
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topology-node {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #00ff00;
+            background: radial-gradient(circle, #00ff00, #004400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .topology-node:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px #00ff00;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+            z-index: 1;
+        }
+        
+        .tabs-advanced {
+            display: flex;
+            background: #1a1a1a;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            margin: 20px 0 0 0;
+        }
+        
+        .tab-advanced {
+            padding: 15px 25px;
+            background: #333;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+            transition: all 0.3s;
+        }
+        
+        .tab-advanced.active {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .tab-content-advanced {
+            display: none;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 0 0 10px 10px;
+            border: 1px solid #333;
+        }
+        
+        .tab-content-advanced.active {
+            display: block;
+        }
+        
+        .real-time-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #00ff00;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        .threat-meter {
+            width: 100%;
+            height: 20px;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .threat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+            transition: width 0.3s;
+        }
+        
+        .coordinate-display {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            color: #00ff00;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="YUSR-BLACK.png" alt="YUSR-TEC Logo" class="logo">
+        <h1>🎯 تفاصيل الهدف المتقدمة - YUSR-TEC</h1>
+        <nav style="margin-top: 15px;">
+            <button onclick="window.location.href='index.html'" style="background: #666;">🏠 الصفحة الرئيسية</button>
+            <button onclick="window.location.href='targets.html'" style="background: #666; margin: 0 10px;">👑 الأهداف المخترقة</button>
+            <button onclick="window.location.href='visual-targets.html'" style="background: #9900cc; margin: 0 10px;">🌐 العرض المرئي</button>
+            <button onclick="window.location.href='target-details.html'" class="ai-button">🎯 تفاصيل الهدف</button>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="details-container">
+            <div class="target-header">
+                <div>
+                    <h2 id="targetTitle">🎯 لم يتم اختيار هدف</h2>
+                    <p id="targetSubtitle">اختر هدفاً من القائمة لعرض التفاصيل</p>
+                </div>
+                <div>
+                    <span class="real-time-indicator"></span>
+                    <span style="color: #00ff00;">مباشر</span>
+                </div>
+            </div>
+
+            <div id="targetContent" style="display: none;">
+                <!-- Basic Information Grid -->
+                <div class="target-info-grid">
+                    <div class="info-card">
+                        <h3>📍 معلومات الموقع</h3>
+                        <div id="locationInfo"></div>
+                        <div class="coordinate-display" id="coordinates"></div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>🌐 معلومات الشبكة</h3>
+                        <div id="networkInfo"></div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>💻 معلومات النظام</h3>
+                        <div id="systemInfo"></div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3>🔐 حالة الأمان</h3>
+                        <div id="securityInfo"></div>
+                        <div class="threat-meter">
+                            <div class="threat-fill" id="threatLevel"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-time Analytics -->
+                <div class="real-time-analytics">
+                    <h3>📊 التحليل المتقدم في الوقت الحقيقي</h3>
+                    
+                    <div class="live-data">
+                        <div class="data-item">
+                            <div>📈 حركة البيانات</div>
+                            <div class="data-value" id="dataTraffic">0 MB/s</div>
+                        </div>
+                        <div class="data-item">
+                            <div>🔴 التهديدات النشطة</div>
+                            <div class="data-value" id="activeThreats">0</div>
+                        </div>
+                        <div class="data-item">
+                            <div>🎯 محاولات الاختراق</div>
+                            <div class="data-value" id="exploitAttempts">0</div>
+                        </div>
+                        <div class="data-item">
+                            <div>📡 الاتصالات المفتوحة</div>
+                            <div class="data-value" id="openConnections">0</div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-chart">
+                        <h4>📈 رسم بياني للنشاط في الوقت الحقيقي</h4>
+                        <canvas id="activityChart" width="100%" height="150"></canvas>
+                    </div>
+                </div>
+
+                <!-- Advanced Tabs -->
+                <div class="tabs-advanced">
+                    <button class="tab-advanced active" onclick="showAdvancedTab('location-details')">📍 تفاصيل الموقع</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('network-topology')">🌐 طوبولوجيا الشبكة</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('vulnerability-timeline')">⚡ خط الثغرات الزمني</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('forensic-analysis')">🔬 التحليل الجنائي</button>
+                </div>
+
+                <!-- Location Details Tab -->
+                <div id="location-details" class="tab-content-advanced active">
+                    <div class="location-map">
+                        <h4>🗺️ خريطة الموقع التفاعلية</h4>
+                        <div id="mapContainer"></div>
+                        <div style="margin-top: 20px;">
+                            <div><strong>🌍 القارة:</strong> <span id="continent"></span></div>
+                            <div><strong>🏳️ الدولة:</strong> <span id="country"></span></div>
+                            <div><strong>🏙️ المدينة:</strong> <span id="city"></span></div>
+                            <div><strong>📮 الرمز البريدي:</strong> <span id="zipCode"></span></div>
+                            <div><strong>🕐 المنطقة الزمنية:</strong> <span id="timezone"></span></div>
+                            <div><strong>📡 مزود الخدمة:</strong> <span id="isp"></span></div>
+                            <div><strong>🏢 المنظمة:</strong> <span id="organization"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Network Topology Tab -->
+                <div id="network-topology" class="tab-content-advanced">
+                    <div class="network-topology">
+                        <h4>🌐 رسم طوبولوجيا الشبكة</h4>
+                        <div id="topologyContainer"></div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h4>🔍 تفاصيل الشبكة المكتشفة</h4>
+                        <div id="networkDetails"></div>
+                    </div>
+                </div>
+
+                <!-- Vulnerability Timeline Tab -->
+                <div id="vulnerability-timeline" class="tab-content-advanced">
+                    <h4>⚡ التسلسل الزمني للثغرات والاستغلال</h4>
+                    <div class="vulnerability-timeline" id="timelineContainer"></div>
+                </div>
+
+                <!-- Forensic Analysis Tab -->
+                <div id="forensic-analysis" class="tab-content-advanced">
+                    <h4>🔬 التحليل الجنائي المتقدم</h4>
+                    <div id="forensicContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div style="text-align: center; margin: 30px 0;">
+            <button onclick="loadTargetsList()" style="background: #00aa00; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">📋 اختيار هدف</button>
+            <button onclick="exportTargetReport()" style="background: #0066cc; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">📤 تصدير تقرير</button>
+            <button onclick="startRealTimeMonitoring()" style="background: #ff6600; color: #fff; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 10px;">📡 مراقبة مباشرة</button>
+        </div>
+    </div>
+
+    <!-- Target Selection Modal -->
+    <div class="target-details-modal" id="targetSelectionModal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeTargetSelection()">&times;</span>
+            <h2>📋 اختيار الهدف للتحليل</h2>
+            <div id="targetsListContainer"></div>
+        </div>
+    </div>
+
+    <script src="target-details.js"></script>
+</body>
+</html>
