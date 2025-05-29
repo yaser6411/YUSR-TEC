@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,7 +11,7 @@
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .network-map {
             background: radial-gradient(circle at center, #1a1a2e, #16213e, #0f1419);
             border: 2px solid #00ff41;
@@ -22,7 +21,7 @@
             overflow: hidden;
             margin: 20px 0;
         }
-        
+
         .target-node {
             position: absolute;
             width: 120px;
@@ -39,35 +38,35 @@
             animation: pulse 2s infinite;
             box-shadow: 0 0 20px rgba(255, 68, 68, 0.6);
         }
-        
+
         .target-node:hover {
             transform: scale(1.2);
             box-shadow: 0 0 40px rgba(255, 68, 68, 1);
         }
-        
+
         .target-node.high-value {
             background: radial-gradient(circle, #ff6600, #cc4400);
             border-color: #ff8844;
             box-shadow: 0 0 25px rgba(255, 136, 68, 0.8);
         }
-        
+
         .target-node.persistent {
             background: radial-gradient(circle, #00ff00, #008800);
             border-color: #44ff44;
             box-shadow: 0 0 25px rgba(68, 255, 68, 0.8);
         }
-        
+
         @keyframes pulse {
             0% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.6); }
             50% { box-shadow: 0 0 30px rgba(255, 68, 68, 1); }
             100% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.6); }
         }
-        
+
         .node-icon {
             font-size: 24px;
             margin-bottom: 5px;
         }
-        
+
         .node-address {
             font-size: 10px;
             color: #fff;
@@ -75,7 +74,7 @@
             text-align: center;
             word-break: break-all;
         }
-        
+
         .connection-line {
             position: absolute;
             background: linear-gradient(90deg, #ff0040, transparent);
@@ -83,13 +82,13 @@
             transform-origin: left center;
             animation: dataFlow 3s infinite;
         }
-        
+
         @keyframes dataFlow {
             0% { opacity: 0; width: 0; }
             50% { opacity: 1; width: 100%; }
             100% { opacity: 0; width: 100%; }
         }
-        
+
         .target-details-modal {
             position: fixed;
             top: 0;
@@ -101,7 +100,7 @@
             z-index: 1000;
             backdrop-filter: blur(10px);
         }
-        
+
         .modal-content {
             position: relative;
             background: linear-gradient(135deg, #1a0000, #330000);
@@ -113,7 +112,7 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-        
+
         .close-modal {
             position: absolute;
             top: 15px;
@@ -122,7 +121,7 @@
             font-size: 30px;
             cursor: pointer;
         }
-        
+
         .vulnerability-chart {
             background: #111;
             border: 1px solid #333;
@@ -130,7 +129,7 @@
             padding: 20px;
             margin: 15px 0;
         }
-        
+
         .vuln-bar {
             background: #333;
             height: 20px;
@@ -138,20 +137,20 @@
             margin: 10px 0;
             overflow: hidden;
         }
-        
+
         .vuln-fill {
             height: 100%;
             background: linear-gradient(90deg, #ff0040, #ff4444);
             transition: width 1s ease;
         }
-        
+
         .live-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
-        
+
         .stat-card {
             background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
             border: 2px solid #00ff41;
@@ -161,7 +160,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .stat-card::before {
             content: '';
             position: absolute;
@@ -172,18 +171,18 @@
             background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
             animation: scan 3s infinite;
         }
-        
+
         @keyframes scan {
             0% { left: -100%; }
             100% { left: 100%; }
         }
-        
+
         .stat-value {
             font-size: 36px;
             font-weight: bold;
             color: #ff4444;
         }
-        
+
         .threat-level {
             position: absolute;
             top: 10px;
@@ -193,22 +192,22 @@
             font-size: 12px;
             font-weight: bold;
         }
-        
+
         .threat-critical {
             background: #ff0000;
             color: #fff;
         }
-        
+
         .threat-high {
             background: #ff6600;
             color: #fff;
         }
-        
+
         .threat-medium {
             background: #ffaa00;
             color: #000;
         }
-        
+
         .backdoor-indicator {
             position: absolute;
             bottom: 5px;
@@ -219,12 +218,12 @@
             background: #00ff00;
             animation: blink 1s infinite;
         }
-        
+
         @keyframes blink {
             0%, 50% { opacity: 1; }
             51%, 100% { opacity: 0.3; }
         }
-        
+
         .matrix-bg {
             position: fixed;
             top: 0;
@@ -235,7 +234,7 @@
             z-index: -1;
             opacity: 0.1;
         }
-        
+
         .attack-timeline {
             background: #0a0a0a;
             border: 1px solid #333;
@@ -245,7 +244,7 @@
             max-height: 300px;
             overflow-y: auto;
         }
-        
+
         .timeline-item {
             padding: 10px;
             border-left: 3px solid #ff4444;
@@ -254,7 +253,7 @@
             background: #111;
             border-radius: 5px;
         }
-        
+
         .control-panel {
             background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
             border: 2px solid #00ff41;
@@ -266,7 +265,7 @@
 </head>
 <body>
     <div class="matrix-bg" id="matrixBg"></div>
-    
+
     <div class="header">
         <img src="YUSR-BLACK.png" alt="YUSR-TEC Logo" class="logo">
         <h1>🌐 العرض المرئي للأهداف المخترقة - YUSR-TEC</h1>

@@ -834,6 +834,472 @@ window.onclick = function(event) {
     }
 }
 
+// Download target data functionality
+function downloadTargetData(targetAddress) {
+    console.log(`📥 Opening download manager for ${targetAddress}`);
+    
+    // Show download manager
+    document.getElementById('downloadManager').style.display = 'block';
+    
+    // Generate and display captured data
+    generateCapturedData(targetAddress);
+}
+
+// Generate captured surveillance data
+function generateCapturedData(targetAddress) {
+    const currentTime = new Date().toLocaleString('ar-SA');
+    
+    // Generate images and videos data
+    const imagesData = [
+        { name: 'screenshot_desktop_001.png', size: '2.4 MB', time: currentTime, type: 'screenshot' },
+        { name: 'screenshot_browser_002.png', size: '1.8 MB', time: currentTime, type: 'screenshot' },
+        { name: 'webcam_capture_001.jpg', size: '945 KB', time: currentTime, type: 'webcam' },
+        { name: 'webcam_capture_002.jpg', size: '1.1 MB', time: currentTime, type: 'webcam' },
+        { name: 'screen_recording_001.mp4', size: '45.2 MB', time: currentTime, type: 'video' },
+        { name: 'webcam_video_001.mp4', size: '12.7 MB', time: currentTime, type: 'video' },
+        { name: 'login_page_capture.png', size: '876 KB', time: currentTime, type: 'screenshot' },
+        { name: 'banking_session.png', size: '1.9 MB', time: currentTime, type: 'screenshot' }
+    ];
+    
+    // Generate input monitoring data
+    const inputData = [
+        { name: 'keylogger_session_001.txt', size: '156 KB', time: currentTime, type: 'keylog', content: 'Keyboard inputs captured' },
+        { name: 'mouse_tracking_001.json', size: '89 KB', time: currentTime, type: 'mouse', content: 'Mouse movements and clicks' },
+        { name: 'clipboard_history.txt', size: '23 KB', time: currentTime, type: 'clipboard', content: 'Clipboard data' },
+        { name: 'password_captures.txt', size: '45 KB', time: currentTime, type: 'passwords', content: 'Captured passwords' },
+        { name: 'form_data.json', size: '67 KB', time: currentTime, type: 'forms', content: 'Form submissions' },
+        { name: 'browser_history.json', size: '234 KB', time: currentTime, type: 'browser', content: 'Browser activity' },
+        { name: 'microphone_recording.wav', size: '8.9 MB', time: currentTime, type: 'audio', content: 'Audio surveillance' }
+    ];
+    
+    // Display images data
+    const imagesContainer = document.getElementById('capturedImages');
+    imagesContainer.innerHTML = `
+        <div style="color: #00ff00; font-weight: bold; margin-bottom: 10px;">📸 الملفات المرئية المسروقة (${imagesData.length} ملف)</div>
+        ${imagesData.map(img => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid #333;">
+                <div>
+                    <div style="color: #fff; font-size: 14px;">${getFileIcon(img.type)} ${img.name}</div>
+                    <div style="color: #888; font-size: 12px;">الحجم: ${img.size} | الوقت: ${img.time}</div>
+                </div>
+                <button onclick="previewFile('${img.name}', '${img.type}')" style="background: #0066cc; color: #fff; padding: 3px 8px; border: none; border-radius: 3px; font-size: 12px;">👁️ معاينة</button>
+            </div>
+        `).join('')}
+    `;
+    
+    // Display input data
+    const inputContainer = document.getElementById('inputData');
+    inputContainer.innerHTML = `
+        <div style="color: #ff6600; font-weight: bold; margin-bottom: 10px;">⌨️ سجلات الإدخال والتحكم (${inputData.length} ملف)</div>
+        ${inputData.map(input => `
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 5px; border-bottom: 1px solid #333;">
+                <div>
+                    <div style="color: #fff; font-size: 14px;">${getFileIcon(input.type)} ${input.name}</div>
+                    <div style="color: #888; font-size: 12px;">الحجم: ${input.size} | النوع: ${input.content}</div>
+                </div>
+                <button onclick="previewFile('${input.name}', '${input.type}')" style="background: #ff6600; color: #fff; padding: 3px 8px; border: none; border-radius: 3px; font-size: 12px;">👁️ معاينة</button>
+            </div>
+        `).join('')}
+    `;
+    
+    // Store data globally for download
+    window.currentCapturedData = {
+        target: targetAddress,
+        images: imagesData,
+        inputs: inputData,
+        timestamp: currentTime
+    };
+}
+
+// Get file icon based on type
+function getFileIcon(type) {
+    const icons = {
+        'screenshot': '📸',
+        'webcam': '📷',
+        'video': '🎥',
+        'keylog': '⌨️',
+        'mouse': '🖱️',
+        'clipboard': '📋',
+        'passwords': '🔑',
+        'forms': '📝',
+        'browser': '🌐',
+        'audio': '🎤'
+    };
+    return icons[type] || '📄';
+}
+
+// Preview captured file
+function previewFile(filename, type) {
+    let previewContent = '';
+    
+    switch (type) {
+        case 'screenshot':
+        case 'webcam':
+            previewContent = `
+                <div style="text-align: center;">
+                    <h3>📸 معاينة الصورة: ${filename}</h3>
+                    <div style="background: #222; border: 2px dashed #666; padding: 40px; margin: 20px 0;">
+                        <div style="font-size: 48px;">🖼️</div>
+                        <div>صورة ملتقطة من الهدف</div>
+                        <div style="color: #888; font-size: 12px;">الدقة: 1920x1080 | العمق: 24 بت</div>
+                    </div>
+                </div>
+            `;
+            break;
+        case 'video':
+            previewContent = `
+                <div style="text-align: center;">
+                    <h3>🎥 معاينة الفيديو: ${filename}</h3>
+                    <div style="background: #222; border: 2px dashed #666; padding: 40px; margin: 20px 0;">
+                        <div style="font-size: 48px;">▶️</div>
+                        <div>تسجيل فيديو من الهدف</div>
+                        <div style="color: #888; font-size: 12px;">المدة: 2:34 | الدقة: 1920x1080 | 30 FPS</div>
+                    </div>
+                </div>
+            `;
+            break;
+        case 'keylog':
+            previewContent = `
+                <div>
+                    <h3>⌨️ معاينة سجل المفاتيح: ${filename}</h3>
+                    <div style="background: #000; color: #00ff00; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px;">
+                        [2024-01-15 14:23:12] Window: Login Form - banking.example.com<br>
+                        [2024-01-15 14:23:15] username: johnsmith<br>
+                        [2024-01-15 14:23:18] [TAB]<br>
+                        [2024-01-15 14:23:20] password: MySecretPass123!<br>
+                        [2024-01-15 14:23:23] [ENTER]<br>
+                        [2024-01-15 14:24:01] Window: Account Dashboard<br>
+                        [2024-01-15 14:24:05] transfer amount: 5000<br>
+                        [2024-01-15 14:24:08] [TAB]<br>
+                        [2024-01-15 14:24:10] account number: 1234567890<br>
+                    </div>
+                </div>
+            `;
+            break;
+        case 'mouse':
+            previewContent = `
+                <div>
+                    <h3>🖱️ معاينة تتبع الماوس: ${filename}</h3>
+                    <div style="background: #000; color: #ff6600; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px;">
+                        {"timestamp": "2024-01-15T14:23:12Z", "event": "move", "x": 450, "y": 200}<br>
+                        {"timestamp": "2024-01-15T14:23:13Z", "event": "click", "button": "left", "x": 450, "y": 200}<br>
+                        {"timestamp": "2024-01-15T14:23:15Z", "event": "move", "x": 520, "y": 240}<br>
+                        {"timestamp": "2024-01-15T14:23:16Z", "event": "click", "button": "left", "x": 520, "y": 240}<br>
+                        {"timestamp": "2024-01-15T14:23:20Z", "event": "scroll", "direction": "down", "delta": 3}<br>
+                        {"timestamp": "2024-01-15T14:23:25Z", "event": "drag", "from": {"x": 300, "y": 150}, "to": {"x": 400, "y": 200}}<br>
+                    </div>
+                </div>
+            `;
+            break;
+        default:
+            previewContent = `
+                <div style="text-align: center;">
+                    <h3>📄 معاينة الملف: ${filename}</h3>
+                    <div style="background: #222; padding: 40px; margin: 20px 0;">
+                        <div style="font-size: 48px;">📋</div>
+                        <div>بيانات مسروقة من الهدف</div>
+                        <div style="color: #888; font-size: 12px;">نوع الملف: ${type}</div>
+                    </div>
+                </div>
+            `;
+    }
+    
+    alert(`معاينة الملف:\n\n${filename}\nنوع: ${type}\n\nاستخدم زر التحميل للحصول على الملف الكامل`);
+}
+
+// Download specific folder
+function downloadFolder(folderName) {
+    const data = window.currentCapturedData;
+    if (!data) {
+        alert('❌ لا توجد بيانات للتحميل');
+        return;
+    }
+    
+    let filesToDownload = [];
+    let folderContent = '';
+    
+    if (folderName === 'Vpic') {
+        filesToDownload = data.images;
+        folderContent = generateVpicFolderContent(data);
+    } else if (folderName === 'showCo') {
+        filesToDownload = data.inputs;
+        folderContent = generateShowCoFolderContent(data);
+    }
+    
+    // Create and download the folder content as a text file
+    const blob = new Blob([folderContent], { type: 'text/plain; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${folderName}_${data.target.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert(`📥 تم تحميل مجلد ${folderName} بنجاح!\nعدد الملفات: ${filesToDownload.length}\nالهدف: ${data.target}`);
+}
+
+// Generate Vpic folder content
+function generateVpicFolderContent(data) {
+    let content = `
+YUSR-TEC - مجلد الصور والفيديوهات المسروقة (Vpic)
+=====================================================
+
+الهدف: ${data.target}
+تاريخ الاستخراج: ${data.timestamp}
+عدد الملفات: ${data.images.length}
+
+تفاصيل الملفات:
+===============
+
+`;
+
+    data.images.forEach((img, index) => {
+        content += `
+${index + 1}. ${img.name}
+   النوع: ${img.type}
+   الحجم: ${img.size}
+   وقت الالتقاط: ${img.time}
+   المسار: ./Vpic/${img.name}
+   الحالة: ✅ تم الاستخراج بنجاح
+
+`;
+    });
+
+    content += `
+
+إحصائيات المجلد:
+================
+📸 لقطات الشاشة: ${data.images.filter(img => img.type === 'screenshot').length}
+📷 صور الكاميرا: ${data.images.filter(img => img.type === 'webcam').length}
+🎥 مقاطع الفيديو: ${data.images.filter(img => img.type === 'video').length}
+
+الحجم الإجمالي: ${calculateTotalSize(data.images)}
+
+تعليمات الاستخدام:
+==================
+1. قم بإنشاء مجلد يحمل اسم "Vpic"
+2. ضع جميع الملفات المذكورة أعلاه في هذا المجلد
+3. استخدم أدوات عرض الصور والفيديو لتصفح المحتوى
+4. احتفظ بهذا الملف كفهرس للمحتويات
+
+⚠️ تحذير أمني: هذه البيانات حساسة ومسروقة من الهدف المحدد
+`;
+
+    return content;
+}
+
+// Generate showCo folder content
+function generateShowCoFolderContent(data) {
+    let content = `
+YUSR-TEC - مجلد سجلات الإدخال والتحكم (showCo)
+=============================================
+
+الهدف: ${data.target}
+تاريخ الاستخراج: ${data.timestamp}
+عدد الملفات: ${data.inputs.length}
+
+تفاصيل الملفات:
+===============
+
+`;
+
+    data.inputs.forEach((input, index) => {
+        content += `
+${index + 1}. ${input.name}
+   النوع: ${input.type}
+   الحجم: ${input.size}
+   المحتوى: ${input.content}
+   وقت الالتقاط: ${input.time}
+   المسار: ./showCo/${input.name}
+   الحالة: ✅ تم الاستخراج بنجاح
+
+`;
+    });
+
+    content += `
+
+إحصائيات المجلد:
+================
+⌨️ سجلات المفاتيح: ${data.inputs.filter(input => input.type === 'keylog').length}
+🖱️ تتبع الماوس: ${data.inputs.filter(input => input.type === 'mouse').length}
+🔑 كلمات المرور: ${data.inputs.filter(input => input.type === 'passwords').length}
+📋 بيانات الحافظة: ${data.inputs.filter(input => input.type === 'clipboard').length}
+🎤 التسجيلات الصوتية: ${data.inputs.filter(input => input.type === 'audio').length}
+
+الحجم الإجمالي: ${calculateTotalSize(data.inputs)}
+
+محتوى نموذجي لسجل المفاتيح:
+============================
+[2024-01-15 14:23:12] Window: Login Form - banking.example.com
+[2024-01-15 14:23:15] username: johnsmith
+[2024-01-15 14:23:18] [TAB]
+[2024-01-15 14:23:20] password: MySecretPass123!
+[2024-01-15 14:23:23] [ENTER]
+[2024-01-15 14:24:01] Window: Account Dashboard
+[2024-01-15 14:24:05] transfer amount: 5000
+
+محتوى نموذجي لتتبع الماوس:
+===========================
+{"timestamp": "2024-01-15T14:23:12Z", "event": "move", "x": 450, "y": 200}
+{"timestamp": "2024-01-15T14:23:13Z", "event": "click", "button": "left", "x": 450, "y": 200}
+{"timestamp": "2024-01-15T14:23:15Z", "event": "move", "x": 520, "y": 240}
+
+تعليمات الاستخدام:
+==================
+1. قم بإنشاء مجلد يحمل اسم "showCo"
+2. ضع جميع الملفات المذكورة أعلاه في هذا المجلد
+3. استخدم محرر النصوص لقراءة ملفات السجلات
+4. استخدم مشغل الصوت للاستماع للتسجيلات
+5. احتفظ بهذا الملف كفهرس للمحتويات
+
+⚠️ تحذير أمني: هذه البيانات حساسة جداً وتحتوي على معلومات شخصية مسروقة
+`;
+
+    return content;
+}
+
+// Download all captured data
+function downloadAllData() {
+    const data = window.currentCapturedData;
+    if (!data) {
+        alert('❌ لا توجد بيانات للتحميل');
+        return;
+    }
+    
+    const allDataContent = generateCompleteReport(data);
+    
+    const blob = new Blob([allDataContent], { type: 'text/plain; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `YUSR-TEC_Complete_Data_${data.target.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert(`📦 تم تحميل جميع البيانات بنجاح!\nإجمالي الملفات: ${data.images.length + data.inputs.length}\nالهدف: ${data.target}`);
+}
+
+// Generate complete surveillance report
+function generateCompleteReport(data) {
+    const vpicContent = generateVpicFolderContent(data);
+    const showCoContent = generateShowCoFolderContent(data);
+    
+    let content = `
+████████████████████████████████████████████████████████████
+█                                                          █
+█  ██╗   ██╗██╗   ██╗███████╗██████╗       ████████╗███████╗ █
+█  ╚██╗ ██╔╝██║   ██║██╔════╝██╔══██╗      ╚══██╔══╝██╔════╝ █
+█   ╚████╔╝ ██║   ██║███████╗██████╔╝         ██║   █████╗   █
+█    ╚██╔╝  ██║   ██║╚════██║██╔══██╗         ██║   ██╔══╝   █
+█     ██║   ╚██████╔╝███████║██║  ██║         ██║   ███████╗ █
+█     ╚═╝    ╚═════╝ ╚══════╝╚═╝  ╚═╝         ╚═╝   ╚══════╝ █
+█                                                          █
+████████████████████████████████████████████████████████████
+
+YUSR-TEC - تقرير شامل للبيانات المسروقة
+========================================
+
+الهدف: ${data.target}
+تاريخ العملية: ${data.timestamp}
+إجمالي الملفات: ${data.images.length + data.inputs.length}
+الحجم الإجمالي: ${calculateTotalSize([...data.images, ...data.inputs])}
+
+ملخص العملية:
+=============
+🎯 الهدف المخترق: ${data.target}
+📊 نجح استخراج ${data.images.length + data.inputs.length} ملف
+📸 صور ومقاطع فيديو: ${data.images.length} ملف
+⌨️ سجلات إدخال: ${data.inputs.length} ملف
+⏱️ مدة العملية: ${Math.floor(Math.random() * 45) + 15} دقيقة
+🔒 مستوى التشفير: عالي
+👻 حالة التخفي: نشط
+
+هيكل المجلدات المُوصى به:
+===========================
+Target_${data.target.replace(/[^a-zA-Z0-9]/g, '_')}/
+├── Vpic/           # الصور والفيديوهات
+│   ├── screenshots/
+│   ├── webcam/
+│   └── videos/
+├── showCo/         # سجلات الإدخال والتحكم
+│   ├── keylogs/
+│   ├── mouse_tracking/
+│   ├── clipboard/
+│   ├── passwords/
+│   └── audio/
+└── reports/        # التقارير والتحليلات
+
+${vpicContent}
+
+${showCoContent}
+
+تحليل أمني للبيانات المستخرجة:
+===============================
+🔍 معلومات حساسة مكتشفة:
+   • كلمات مرور: ${Math.floor(Math.random() * 10) + 5}
+   • حسابات بنكية: ${Math.floor(Math.random() * 3) + 1}
+   • معلومات شخصية: ${Math.floor(Math.random() * 20) + 10}
+   • ملفات سرية: ${Math.floor(Math.random() * 15) + 5}
+
+🎯 نقاط الاهتمام:
+   • جلسات بنكية نشطة
+   • محادثات خاصة
+   • ملفات عمل سرية
+   • معلومات هوية شخصية
+
+⚠️ تحذيرات أمنية مهمة:
+======================
+1. هذه البيانات مسروقة وحساسة للغاية
+2. يجب تشفير جميع الملفات بكلمة مرور قوية
+3. لا تشارك هذه المعلومات مع أطراف غير موثوقة
+4. احذف البيانات بشكل آمن بعد انتهاء الغرض منها
+5. تأكد من عدم ترك أثر رقمي للعملية
+
+إخلاء مسؤولية:
+===============
+تم إنشاء هذا التقرير بواسطة YUSR-TEC لأغراض تعليمية وأمنية فقط.
+استخدام هذه الأدوات لأغراض ضارة أو غير قانونية مسؤولية المستخدم بالكامل.
+
+تاريخ إنشاء التقرير: ${new Date().toLocaleString('ar-SA')}
+إصدار YUSR-TEC: v2.0
+رقم العملية: ${Math.random().toString(36).substr(2, 9).toUpperCase()}
+
+════════════════════════════════════════════════════════════
+`;
+
+    return content;
+}
+
+// Calculate total size of files
+function calculateTotalSize(files) {
+    let totalMB = 0;
+    files.forEach(file => {
+        const size = file.size;
+        if (size.includes('MB')) {
+            totalMB += parseFloat(size.replace(' MB', ''));
+        } else if (size.includes('KB')) {
+            totalMB += parseFloat(size.replace(' KB', '')) / 1024;
+        } else if (size.includes('GB')) {
+            totalMB += parseFloat(size.replace(' GB', '')) * 1024;
+        }
+    });
+    
+    if (totalMB > 1024) {
+        return `${(totalMB / 1024).toFixed(2)} GB`;
+    } else {
+        return `${totalMB.toFixed(2)} MB`;
+    }
+}
+
+// Close download manager
+function closeDownloadManager() {
+    document.getElementById('downloadManager').style.display = 'none';
+}
+
 // Cleanup function when leaving page
 window.addEventListener('beforeunload', function() {
     if (window.victimMonitoringInterval) {
