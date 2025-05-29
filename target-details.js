@@ -90,7 +90,7 @@ function extractTargetFromCommand(command) {
     return generateAdvancedTargetData(address, type, command);
 }
 
-// Generate advanced target data
+// Generate advanced target data with comprehensive device information
 function generateAdvancedTargetData(address, type, command) {
     return {
         id: Date.now() + Math.random(),
@@ -122,11 +122,246 @@ function generateAdvancedTargetData(address, type, command) {
         // Real-time Stats
         realTimeStats: initializeRealTimeStats(),
         
+        // Connected Devices
+        connectedDevices: generateConnectedDevices(),
+        
+        // Network Infrastructure
+        infrastructure: generateNetworkInfrastructure(),
+        
+        // Domain Associations
+        domainAssociations: generateDomainAssociations(address),
+        
+        // IoT Devices
+        iotDevices: generateIoTDevices(),
+        
+        // Network Services
+        networkServices: generateNetworkServices(),
+        
         // Compromise details
         compromisedAt: new Date(command.timestamp),
         discoveredAt: new Date(),
         lastActivity: new Date()
     };
+}
+
+// Generate connected devices with detailed information
+function generateConnectedDevices() {
+    const devices = [
+        { type: 'workstation', os: 'Windows 11 Pro', hostname: 'WIN-' + generateRandomString(8) },
+        { type: 'server', os: 'Ubuntu 22.04 LTS', hostname: 'srv-' + generateRandomString(6) },
+        { type: 'mobile', os: 'Android 13', hostname: 'android-' + generateRandomString(6) },
+        { type: 'mobile', os: 'iOS 16.5', hostname: 'iPhone-' + generateRandomString(4) },
+        { type: 'laptop', os: 'macOS Ventura', hostname: 'MacBook-' + generateRandomString(6) },
+        { type: 'tablet', os: 'iPadOS 16', hostname: 'iPad-' + generateRandomString(4) },
+        { type: 'iot', os: 'Linux ARM', hostname: 'smart-' + generateRandomString(6) }
+    ];
+    
+    const numDevices = Math.floor(Math.random() * 8) + 3;
+    const connectedDevices = [];
+    
+    for (let i = 0; i < numDevices; i++) {
+        const device = devices[Math.floor(Math.random() * devices.length)];
+        const deviceInfo = {
+            id: generateRandomString(8),
+            hostname: device.hostname,
+            type: device.type,
+            operatingSystem: device.os,
+            ipAddress: generateRandomIP(),
+            macAddress: generateMacAddress(),
+            status: Math.random() > 0.2 ? 'online' : 'offline',
+            lastSeen: new Date(Date.now() - Math.random() * 86400000),
+            openPorts: generateRandomPorts(),
+            vulnerabilities: Math.floor(Math.random() * 8),
+            isCompromised: Math.random() > 0.7,
+            installedSoftware: generateInstalledSoftware(),
+            networkTraffic: {
+                bytesIn: Math.floor(Math.random() * 1000000),
+                bytesOut: Math.floor(Math.random() * 1000000),
+                connections: Math.floor(Math.random() * 50) + 5
+            },
+            security: {
+                firewall: Math.random() > 0.3,
+                antivirus: Math.random() > 0.4,
+                encrypted: Math.random() > 0.6,
+                lastUpdate: new Date(Date.now() - Math.random() * 2592000000) // Random date within last 30 days
+            }
+        };
+        
+        connectedDevices.push(deviceInfo);
+    }
+    
+    return connectedDevices;
+}
+
+// Generate network infrastructure details
+function generateNetworkInfrastructure() {
+    return {
+        routers: [
+            {
+                model: 'Cisco ISR 2901',
+                ip: generateRandomIP(),
+                firmware: '15.7(3)M8',
+                ports: 24,
+                vlans: [1, 10, 20, 30],
+                isManaged: true,
+                hasVulnerabilities: Math.random() > 0.6
+            },
+            {
+                model: 'Netgear R7000',
+                ip: generateRandomIP(),
+                firmware: 'V1.0.11.123',
+                ports: 4,
+                vlans: [1],
+                isManaged: false,
+                hasVulnerabilities: Math.random() > 0.3
+            }
+        ],
+        switches: [
+            {
+                model: 'HP ProCurve 2524',
+                ip: generateRandomIP(),
+                ports: 24,
+                managementVlan: 1,
+                spanningTree: true,
+                portSecurity: Math.random() > 0.5
+            }
+        ],
+        accessPoints: [
+            {
+                ssid: 'CorporateWiFi',
+                bssid: generateMacAddress(),
+                channel: Math.floor(Math.random() * 11) + 1,
+                encryption: 'WPA3',
+                clientCount: Math.floor(Math.random() * 20) + 5
+            },
+            {
+                ssid: 'Guest-Network',
+                bssid: generateMacAddress(),
+                channel: Math.floor(Math.random() * 11) + 1,
+                encryption: 'WPA2',
+                clientCount: Math.floor(Math.random() * 10) + 2
+            }
+        ],
+        firewalls: [
+            {
+                model: 'pfSense',
+                version: '2.7.0',
+                ip: generateRandomIP(),
+                rules: Math.floor(Math.random() * 100) + 50,
+                logging: true,
+                threatBlocking: Math.random() > 0.3
+            }
+        ]
+    };
+}
+
+// Generate domain associations
+function generateDomainAssociations(primaryAddress) {
+    const domains = [
+        'mail.' + primaryAddress.replace(/^www\./, ''),
+        'ftp.' + primaryAddress.replace(/^www\./, ''),
+        'api.' + primaryAddress.replace(/^www\./, ''),
+        'admin.' + primaryAddress.replace(/^www\./, ''),
+        'secure.' + primaryAddress.replace(/^www\./, ''),
+        'backup.' + primaryAddress.replace(/^www\./, '')
+    ];
+    
+    return domains.slice(0, Math.floor(Math.random() * 4) + 2).map(domain => ({
+        domain: domain,
+        ip: generateRandomIP(),
+        isActive: Math.random() > 0.2,
+        hasSSL: Math.random() > 0.3,
+        lastChecked: new Date(Date.now() - Math.random() * 3600000),
+        technologies: generateWebTechnologies(),
+        vulnerabilities: Math.floor(Math.random() * 5)
+    }));
+}
+
+// Generate IoT devices
+function generateIoTDevices() {
+    const iotTypes = [
+        { name: 'Smart Thermostat', brand: 'Nest', model: 'Learning Thermostat' },
+        { name: 'Security Camera', brand: 'Hikvision', model: 'DS-2CD2085G1' },
+        { name: 'Smart Lock', brand: 'August', model: 'Smart Lock Pro' },
+        { name: 'WiFi Speaker', brand: 'Sonos', model: 'One Gen2' },
+        { name: 'Smart TV', brand: 'Samsung', model: 'QN55Q80A' },
+        { name: 'Smart Doorbell', brand: 'Ring', model: 'Video Doorbell Pro' },
+        { name: 'Smart Plug', brand: 'TP-Link', model: 'Kasa EP25' },
+        { name: 'WiFi Printer', brand: 'HP', model: 'LaserJet Pro M404n' }
+    ];
+    
+    const numDevices = Math.floor(Math.random() * 6) + 2;
+    return iotTypes.slice(0, numDevices).map(device => ({
+        ...device,
+        ip: generateRandomIP(),
+        mac: generateMacAddress(),
+        firmware: generateRandomString(8),
+        lastUpdate: new Date(Date.now() - Math.random() * 7776000000), // Random date within last 90 days
+        isVulnerable: Math.random() > 0.5,
+        defaultCredentials: Math.random() > 0.7,
+        openPorts: generateRandomPorts().slice(0, 3),
+        protocols: ['HTTP', 'HTTPS', 'UPnP', 'mDNS'].slice(0, Math.floor(Math.random() * 3) + 1)
+    }));
+}
+
+// Generate network services
+function generateNetworkServices() {
+    const services = [
+        { name: 'Active Directory', port: 389, version: '2019', critical: true },
+        { name: 'DNS Server', port: 53, version: 'BIND 9.16', critical: true },
+        { name: 'DHCP Server', port: 67, version: 'ISC DHCP 4.4', critical: true },
+        { name: 'File Server', port: 445, version: 'SMB 3.1.1', critical: false },
+        { name: 'Print Server', port: 631, version: 'CUPS 2.3', critical: false },
+        { name: 'Web Server', port: 80, version: 'Apache 2.4.54', critical: false },
+        { name: 'Database', port: 3306, version: 'MySQL 8.0', critical: true },
+        { name: 'Email Server', port: 25, version: 'Postfix 3.6', critical: false }
+    ];
+    
+    return services.filter(() => Math.random() > 0.4).map(service => ({
+        ...service,
+        status: Math.random() > 0.1 ? 'running' : 'stopped',
+        connections: Math.floor(Math.random() * 100) + 10,
+        lastRestart: new Date(Date.now() - Math.random() * 604800000), // Random date within last week
+        hasVulnerabilities: Math.random() > 0.6,
+        isPatched: Math.random() > 0.3,
+        configIssues: Math.floor(Math.random() * 5)
+    }));
+}
+
+// Helper functions
+function generateRandomString(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return Array.from({length}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+}
+
+function generateRandomPorts() {
+    const commonPorts = [22, 23, 25, 53, 80, 110, 143, 443, 993, 995, 1433, 3306, 3389, 5432, 8080];
+    const numPorts = Math.floor(Math.random() * 6) + 2;
+    return commonPorts.sort(() => 0.5 - Math.random()).slice(0, numPorts);
+}
+
+function generateInstalledSoftware() {
+    const software = [
+        'Microsoft Office 365',
+        'Google Chrome',
+        'Mozilla Firefox',
+        'Adobe Acrobat Reader',
+        'VLC Media Player',
+        'WinRAR',
+        'Notepad++',
+        'TeamViewer',
+        'Skype',
+        'Zoom'
+    ];
+    
+    const numSoftware = Math.floor(Math.random() * 8) + 3;
+    return software.sort(() => 0.5 - Math.random()).slice(0, numSoftware);
+}
+
+function generateWebTechnologies() {
+    const techs = ['Apache', 'Nginx', 'PHP', 'MySQL', 'WordPress', 'jQuery', 'Bootstrap', 'CloudFlare'];
+    const numTechs = Math.floor(Math.random() * 5) + 2;
+    return techs.sort(() => 0.5 - Math.random()).slice(0, numTechs);
 }
 
 // Generate location data

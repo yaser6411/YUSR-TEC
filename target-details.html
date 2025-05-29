@@ -323,6 +323,10 @@
                 <!-- Advanced Tabs -->
                 <div class="tabs-advanced">
                     <button class="tab-advanced active" onclick="showAdvancedTab('location-details')">📍 تفاصيل الموقع</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('connected-devices')">📱 الأجهزة المتصلة</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('network-infrastructure')">🏗️ البنية التحتية</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('domain-associations')">🔗 ارتباطات الدومين</button>
+                    <button class="tab-advanced" onclick="showAdvancedTab('iot-devices')">🏠 أجهزة IoT</button>
                     <button class="tab-advanced" onclick="showAdvancedTab('network-topology')">🌐 طوبولوجيا الشبكة</button>
                     <button class="tab-advanced" onclick="showAdvancedTab('vulnerability-timeline')">⚡ خط الثغرات الزمني</button>
                     <button class="tab-advanced" onclick="showAdvancedTab('forensic-analysis')">🔬 التحليل الجنائي</button>
@@ -362,6 +366,30 @@
                 <div id="vulnerability-timeline" class="tab-content-advanced">
                     <h4>⚡ التسلسل الزمني للثغرات والاستغلال</h4>
                     <div class="vulnerability-timeline" id="timelineContainer"></div>
+                </div>
+
+                <!-- Connected Devices Tab -->
+                <div id="connected-devices" class="tab-content-advanced">
+                    <h4>📱 الأجهزة المتصلة بالشبكة</h4>
+                    <div id="connectedDevicesContainer"></div>
+                </div>
+
+                <!-- Network Infrastructure Tab -->
+                <div id="network-infrastructure" class="tab-content-advanced">
+                    <h4>🏗️ البنية التحتية للشبكة</h4>
+                    <div id="infrastructureContainer"></div>
+                </div>
+
+                <!-- Domain Associations Tab -->
+                <div id="domain-associations" class="tab-content-advanced">
+                    <h4>🔗 الدومينات والمواقع المرتبطة</h4>
+                    <div id="domainAssociationsContainer"></div>
+                </div>
+
+                <!-- IoT Devices Tab -->
+                <div id="iot-devices" class="tab-content-advanced">
+                    <h4>🏠 أجهزة إنترنت الأشياء (IoT)</h4>
+                    <div id="iotDevicesContainer"></div>
                 </div>
 
                 <!-- Forensic Analysis Tab -->

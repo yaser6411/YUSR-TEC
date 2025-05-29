@@ -290,7 +290,7 @@ function createConnectionLine(node1, node2) {
     return line;
 }
 
-// Show target details in modal
+// Show target details in modal with comprehensive information
 function showTargetDetails(target) {
     selectedTarget = target;
     const modal = document.getElementById('targetModal');
@@ -298,60 +298,229 @@ function showTargetDetails(target) {
 
     content.innerHTML = `
         <h2>${getTargetIcon(target.type)} ${target.address}</h2>
-        <div style="color: #888; margin-bottom: 20px;">تم الاختراق: ${target.compromisedAt.toLocaleString('ar-SA')}</div>
-
-        <div class="vulnerability-chart">
-            <h3>🔍 الثغرات المكتشفة</h3>
-            ${target.vulnerabilities.map(vuln => `
-                <div style="margin: 10px 0;">
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>${vuln}</span>
-                        <span style="color: #ff4444;">عالي</span>
-                    </div>
-                    <div class="vuln-bar">
-                        <div class="vuln-fill" style="width: ${Math.random() * 60 + 40}%;"></div>
-                    </div>
-                </div>
-            `).join('')}
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="color: #888;">تم الاختراق: ${target.compromisedAt.toLocaleString('ar-SA')}</div>
+            <div style="background: #0066cc; color: #fff; padding: 5px 10px; border-radius: 15px; font-size: 12px;">
+                ${target.aiConfidence || Math.floor(Math.random() * 30) + 70}% AI Confidence
+            </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div style="background: #111; padding: 15px; border-radius: 8px;">
-                <h4>💻 معلومات النظام</h4>
-                <div>نظام التشغيل: ${target.systemInfo.os}</div>
-                <div>الخدمات: ${target.systemInfo.services.join(', ')}</div>
-                <div>الموقع: ${target.location.city}, ${target.location.country}</div>
+        <!-- Enhanced Tabs -->
+        <div style="display: flex; background: #222; border-radius: 8px 8px 0 0; margin-bottom: 0;">
+            <button class="detail-tab active" onclick="showDetailTab('overview')" style="flex: 1; padding: 12px; background: #00ff00; color: #000; border: none; border-radius: 8px 0 0 0;">📊 نظرة عامة</button>
+            <button class="detail-tab" onclick="showDetailTab('devices')" style="flex: 1; padding: 12px; background: #333; color: #fff; border: none;">📱 الأجهزة المتصلة</button>
+            <button class="detail-tab" onclick="showDetailTab('network')" style="flex: 1; padding: 12px; background: #333; color: #fff; border: none;">🌐 تفاصيل الشبكة</button>
+            <button class="detail-tab" onclick="showDetailTab('domains')" style="flex: 1; padding: 12px; background: #333; color: #fff; border: none; border-radius: 0 8px 0 0;">🔗 الدومينات</button>
+        </div>
+
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="detail-tab-content" style="background: #111; padding: 20px; border-radius: 0 0 8px 8px;">
+            <div class="vulnerability-chart">
+                <h3>🔍 الثغرات المكتشفة</h3>
+                ${target.vulnerabilities.map(vuln => `
+                    <div style="margin: 10px 0;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>${vuln}</span>
+                            <span style="color: #ff4444;">عالي</span>
+                        </div>
+                        <div class="vuln-bar">
+                            <div class="vuln-fill" style="width: ${Math.random() * 60 + 40}%;"></div>
+                        </div>
+                    </div>
+                `).join('')}
             </div>
-            <div style="background: #111; padding: 15px; border-radius: 8px;">
-                <h4>📊 الإحصائيات</h4>
-                <div>البيانات المسربة: ${target.dataExfiltrated} GB</div>
-                <div>الجلسات النشطة: ${target.activeSessions}</div>
-                <div>مستوى التهديد: ${target.threatLevel}</div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div style="background: #0a0a0a; padding: 15px; border-radius: 8px; border: 1px solid #333;">
+                    <h4>💻 معلومات النظام</h4>
+                    <div>نظام التشغيل: ${target.systemInfo.os}</div>
+                    <div>الخدمات: ${target.systemInfo.services.join(', ')}</div>
+                    <div>الموقع: ${target.location.city}, ${target.location.country}</div>
+                    <div>طريقة الاكتشاف: ${target.discoveryMethod || 'Network Scan'}</div>
+                </div>
+                <div style="background: #0a0a0a; padding: 15px; border-radius: 8px; border: 1px solid #333;">
+                    <h4>📊 الإحصائيات</h4>
+                    <div>البيانات المسربة: ${target.dataExfiltrated} GB</div>
+                    <div>الجلسات النشطة: ${target.activeSessions}</div>
+                    <div>مستوى التهديد: ${target.threatLevel}</div>
+                    <div>الأجهزة المتصلة: ${target.devices?.length || 0}</div>
+                </div>
             </div>
+        </div>
+
+        <!-- Devices Tab -->
+        <div id="devices-tab" class="detail-tab-content" style="display: none; background: #111; padding: 20px; border-radius: 0 0 8px 8px;">
+            <h3>📱 الأجهزة المتصلة بالشبكة</h3>
+            <div style="max-height: 400px; overflow-y: auto;">
+                ${generateDevicesDisplay(target.devices || [])}
+            </div>
+        </div>
+
+        <!-- Network Tab -->
+        <div id="network-tab" class="detail-tab-content" style="display: none; background: #111; padding: 20px; border-radius: 0 0 8px 8px;">
+            <h3>🌐 تفاصيل البنية الشبكية</h3>
+            ${generateNetworkDisplay(target.networkInfo || {})}
+        </div>
+
+        <!-- Domains Tab -->
+        <div id="domains-tab" class="detail-tab-content" style="display: none; background: #111; padding: 20px; border-radius: 0 0 8px 8px;">
+            <h3>🔗 الدومينات والروابط المرتبطة</h3>
+            ${generateDomainsDisplay(target.networkInfo?.connectedDomains || [])}
         </div>
 
         <div style="background: #0a0a0a; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <h4>🎯 الإجراءات المتاحة</h4>
-            <button onclick="executeRemoteCommand('${target.address}')" style="background: #ff4444; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">💻 تنفيذ أوامر</button>
-            <button onclick="exfiltrateData('${target.address}')" style="background: #ff6600; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">📁 سرقة البيانات</button>
-            <button onclick="installPersistence('${target.address}')" style="background: #00aa00; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">🔐 تثبيت استمرارية</button>
-            <button onclick="coverTracks('${target.address}')" style="background: #333; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">👻 إخفاء الأثر</button>
-            <button onclick="startVictimControl('${target.address}')" style="background: #ff0000; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">🎮 التحكم في الضحية</button>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <button onclick="executeRemoteCommand('${target.address}')" style="background: #ff4444; color: #fff; padding: 10px 16px; border: none; border-radius: 4px;">💻 تنفيذ أوامر</button>
+                <button onclick="exfiltrateData('${target.address}')" style="background: #ff6600; color: #fff; padding: 10px 16px; border: none; border-radius: 4px;">📁 سرقة البيانات</button>
+                <button onclick="installPersistence('${target.address}')" style="background: #00aa00; color: #fff; padding: 10px 16px; border: none; border-radius: 4px;">🔐 تثبيت استمرارية</button>
+                <button onclick="coverTracks('${target.address}')" style="background: #333; color: #fff; padding: 10px 16px; border: none; border-radius: 4px;">👻 إخفاء الأثر</button>
+                <button onclick="startVictimControl('${target.address}')" style="background: #ff0000; color: #fff; padding: 10px 16px; border: none; border-radius: 4px;">🎮 التحكم في الضحية</button>
+                <button onclick="openTargetDetails('${target.address}')" style="background: #0066cc; color: #fff; padding: 10px 16px; border: none; border-radius: 4px;">🎯 تفاصيل متقدمة</button>
+            </div>
         </div>
 
         ${target.hasBackdoor ? `
             <div style="background: #001100; border: 1px solid #00aa00; padding: 15px; border-radius: 8px;">
                 <h4>🔐 الأبواب الخلفية النشطة</h4>
-                <div style="color: #00ff00;">✅ SSH Backdoor - نشط</div>
-                <div style="color: #00ff00;">✅ Web Shell - نشط</div>
-                <div style="color: #00ff00;">✅ Reverse Shell - نشط</div>
-                <div style="color: #00ff00;">✅ RAT (Remote Access Trojan) - نشط</div>
-                <div style="color: #00ff00;">✅ Keylogger - نشط</div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                    <div style="color: #00ff00;">✅ SSH Backdoor - نشط</div>
+                    <div style="color: #00ff00;">✅ Web Shell - نشط</div>
+                    <div style="color: #00ff00;">✅ Reverse Shell - نشط</div>
+                    <div style="color: #00ff00;">✅ RAT (Remote Access Trojan) - نشط</div>
+                    <div style="color: #00ff00;">✅ Keylogger - نشط</div>
+                    <div style="color: #00ff00;">✅ Screen Capture - نشط</div>
+                </div>
             </div>
         ` : ''}
     `;
 
     modal.style.display = 'block';
+}
+
+// Generate devices display
+function generateDevicesDisplay(devices) {
+    if (!devices || devices.length === 0) {
+        return '<div style="text-align: center; padding: 40px; color: #888;">لا توجد أجهزة مكتشفة</div>';
+    }
+
+    return devices.map(device => `
+        <div style="background: #0a0a0a; border: 1px solid ${device.compromised ? '#ff4444' : '#333'}; border-radius: 8px; padding: 15px; margin: 10px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; color: ${device.compromised ? '#ff4444' : '#00ff00'};">
+                        ${getDeviceIcon(device.name)} ${device.name}
+                    </div>
+                    <div style="color: #888; font-size: 14px;">IP: ${device.ip} | MAC: ${device.mac}</div>
+                    <div style="color: #666; font-size: 12px;">آخر ظهور: ${device.lastSeen.toLocaleString('ar-SA')}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="color: ${device.status === 'online' ? '#00ff00' : '#ff4444'}; font-weight: bold;">
+                        ${device.status === 'online' ? '🟢 متصل' : '🔴 غير متصل'}
+                    </div>
+                    <div style="color: #888; font-size: 12px;">ثغرات: ${device.vulnerabilities}</div>
+                    ${device.compromised ? '<div style="color: #ff4444; font-size: 12px;">🚨 مخترق</div>' : ''}
+                </div>
+            </div>
+            <div style="margin-top: 10px; display: flex; gap: 10px;">
+                <button onclick="scanDevice('${device.ip}')" style="background: #0066cc; color: #fff; padding: 5px 12px; border: none; border-radius: 3px; font-size: 12px;">🔍 فحص متقدم</button>
+                <button onclick="exploitDevice('${device.ip}')" style="background: #ff6600; color: #fff; padding: 5px 12px; border: none; border-radius: 3px; font-size: 12px;">⚡ استغلال</button>
+                ${device.compromised ? '<button onclick="accessDevice(\'' + device.ip + '\')" style="background: #00aa00; color: #fff; padding: 5px 12px; border: none; border-radius: 3px; font-size: 12px;">🎮 تحكم</button>' : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Generate network display
+function generateNetworkDisplay(networkInfo) {
+    return `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+            <div style="background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 15px;">
+                <h4>🌐 معلومات الشبكة الأساسية</h4>
+                <div style="margin: 8px 0;">📍 الشبكة الفرعية: ${networkInfo.subnet || 'غير محدد'}</div>
+                <div style="margin: 8px 0;">🚪 البوابة: ${networkInfo.gateway || 'غير محدد'}</div>
+                <div style="margin: 8px 0;">🏷️ VLAN: ${networkInfo.vlan || 'افتراضي'}</div>
+                <div style="margin: 8px 0;">📡 عرض النطاق: ${networkInfo.bandwidth || 'غير محدد'}</div>
+            </div>
+            
+            <div style="background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 15px;">
+                <h4>🗄️ خوادم DNS</h4>
+                ${(networkInfo.dnsServers || []).map(dns => `
+                    <div style="margin: 8px 0; display: flex; justify-content: space-between;">
+                        <span>🌐 ${dns}</span>
+                        <button onclick="testDNS('${dns}')" style="background: #0066cc; color: #fff; padding: 2px 8px; border: none; border-radius: 3px; font-size: 11px;">اختبار</button>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div style="background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 15px;">
+                <h4>📊 تحليل حركة البيانات</h4>
+                <div style="margin: 8px 0;">📈 الحركة الحالية: ${Math.floor(Math.random() * 100)} Mbps</div>
+                <div style="margin: 8px 0;">📉 الحد الأدنى: ${Math.floor(Math.random() * 50)} Mbps</div>
+                <div style="margin: 8px 0;">📊 الحد الأقصى: ${Math.floor(Math.random() * 500) + 100} Mbps</div>
+                <div style="margin: 8px 0;">⚡ زمن الاستجابة: ${Math.floor(Math.random() * 50) + 10} ms</div>
+            </div>
+        </div>
+    `;
+}
+
+// Generate domains display
+function generateDomainsDisplay(domains) {
+    if (!domains || domains.length === 0) {
+        return '<div style="text-align: center; padding: 40px; color: #888;">لا توجد دومينات مرتبطة مكتشفة</div>';
+    }
+
+    return domains.map(domain => `
+        <div style="background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 15px; margin: 10px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: bold; color: #00ff00;">🌐 ${domain}</div>
+                    <div style="color: #888; font-size: 14px;">IP: ${generateRandomIP()}</div>
+                    <div style="color: #666; font-size: 12px;">الحالة: ${Math.random() > 0.3 ? 'نشط' : 'غير نشط'}</div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="scanDomain('${domain}')" style="background: #0066cc; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; font-size: 12px;">🔍 فحص</button>
+                    <button onclick="exploitDomain('${domain}')" style="background: #ff6600; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; font-size: 12px;">⚡ استغلال</button>
+                    <button onclick="enumerateDomain('${domain}')" style="background: #00aa00; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; font-size: 12px;">📋 تعداد</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Get device icon
+function getDeviceIcon(deviceName) {
+    const name = deviceName.toLowerCase();
+    if (name.includes('windows')) return '🖥️';
+    if (name.includes('ubuntu') || name.includes('server')) return '🖲️';
+    if (name.includes('iphone') || name.includes('ios')) return '📱';
+    if (name.includes('android')) return '📲';
+    if (name.includes('tv')) return '📺';
+    if (name.includes('router')) return '📡';
+    if (name.includes('printer')) return '🖨️';
+    if (name.includes('camera')) return '📹';
+    return '💻';
+}
+
+// Tab switching function
+function showDetailTab(tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.detail-tab-content');
+    tabContents.forEach(tab => tab.style.display = 'none');
+    
+    // Remove active class from all tabs
+    const tabs = document.querySelectorAll('.detail-tab');
+    tabs.forEach(tab => {
+        tab.style.background = '#333';
+        tab.style.color = '#fff';
+    });
+    
+    // Show selected tab content
+    document.getElementById(tabName + '-tab').style.display = 'block';
+    
+    // Add active class to clicked tab
+    event.target.style.background = '#00ff00';
+    event.target.style.color = '#000';
 }
 
 // Close target modal
@@ -446,10 +615,17 @@ function createMatrixBackground() {
     setInterval(drawMatrix, 100);
 }
 
-// Start real-time updates
+// Start real-time updates with AI management
 function startRealTimeUpdates() {
     setInterval(() => {
         updateLiveStats();
+        performAIManagedScan();
+        updateNetworkTopology();
+        
+        // AI-driven target discovery
+        if (Math.random() > 0.7) {
+            aiDiscoverNewTargets();
+        }
 
         // Simulate new activities
         if (Math.random() > 0.8) {
@@ -458,7 +634,175 @@ function startRealTimeUpdates() {
 
         // Update node animations
         updateNodeAnimations();
-    }, 5000);
+    }, 2000); // Faster updates for real-time feel
+}
+
+// AI-managed scanning and target discovery
+function performAIManagedScan() {
+    const aiActions = [
+        'Port scanning subnet 192.168.1.0/24',
+        'DNS enumeration in progress',
+        'Vulnerability assessment on discovered services',
+        'Social engineering attack vectors identified',
+        'Lateral movement opportunities detected',
+        'Privilege escalation paths analyzed'
+    ];
+
+    if (Math.random() > 0.6) {
+        const action = aiActions[Math.floor(Math.random() * aiActions.length)];
+        console.log(`🤖 AI Manager: ${action}`);
+        
+        // Update AI status in UI
+        updateAIStatus(action);
+    }
+}
+
+// AI discovers new targets automatically
+function aiDiscoverNewTargets() {
+    const potentialTargets = [
+        { address: generateRandomIP(), type: 'server', source: 'Network Sweep' },
+        { address: generateRandomDomain(), type: 'website', source: 'DNS Enumeration' },
+        { address: generateRandomIP(), type: 'iot', source: 'IoT Discovery' },
+        { address: generateRandomDomain(), type: 'database', source: 'Service Detection' }
+    ];
+
+    const discovered = potentialTargets[Math.floor(Math.random() * potentialTargets.length)];
+    
+    if (!visualTargets.find(t => t.address === discovered.address)) {
+        const newTarget = createAIDiscoveredTarget(discovered);
+        visualTargets.push(newTarget);
+        displayNetworkMap();
+        updateLiveStats();
+        
+        // Show AI discovery notification
+        showAIDiscoveryNotification(newTarget);
+        console.log(`🎯 AI discovered new target: ${discovered.address}`);
+    }
+}
+
+// Create AI-discovered target with enhanced details
+function createAIDiscoveredTarget(discovered) {
+    return {
+        id: Date.now() + Math.random(),
+        address: discovered.address,
+        type: discovered.type,
+        source: discovered.source,
+        threatLevel: ['low', 'medium', 'high', 'critical'][Math.floor(Math.random() * 4)],
+        isHighValue: Math.random() > 0.7,
+        hasBackdoor: false,
+        vulnerabilities: generateRandomVulnerabilities(),
+        compromisedAt: new Date(),
+        location: generateRandomLocation(),
+        systemInfo: generateSystemInfo(),
+        devices: generateConnectedDevices(),
+        networkInfo: generateNetworkDetails(),
+        activeSessions: Math.floor(Math.random() * 3) + 1,
+        dataExfiltrated: Math.floor(Math.random() * 50),
+        aiConfidence: Math.floor(Math.random() * 30) + 70, // 70-100% confidence
+        discoveryMethod: discovered.source
+    };
+}
+
+// Generate connected devices
+function generateConnectedDevices() {
+    const deviceTypes = [
+        { name: 'Windows Workstation', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'Ubuntu Server', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'iOS iPhone', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'Android Tablet', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'Smart TV', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'WiFi Router', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'Network Printer', ip: generateRandomIP(), mac: generateMacAddress() },
+        { name: 'Security Camera', ip: generateRandomIP(), mac: generateMacAddress() }
+    ];
+
+    const numDevices = Math.floor(Math.random() * 6) + 2;
+    const devices = [];
+    
+    for (let i = 0; i < numDevices; i++) {
+        const device = deviceTypes[Math.floor(Math.random() * deviceTypes.length)];
+        if (!devices.find(d => d.ip === device.ip)) {
+            devices.push({
+                ...device,
+                status: Math.random() > 0.2 ? 'online' : 'offline',
+                lastSeen: new Date(Date.now() - Math.random() * 86400000),
+                vulnerabilities: Math.floor(Math.random() * 5),
+                compromised: Math.random() > 0.8
+            });
+        }
+    }
+    
+    return devices;
+}
+
+// Generate MAC address
+function generateMacAddress() {
+    return Array.from({length: 6}, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join(':');
+}
+
+// Generate network details
+function generateNetworkDetails() {
+    return {
+        subnet: generateSubnet(),
+        gateway: generateRandomIP(),
+        dnsServers: [generateRandomIP(), generateRandomIP()],
+        dhcpRange: `${generateRandomIP()} - ${generateRandomIP()}`,
+        vlan: Math.floor(Math.random() * 100) + 1,
+        bandwidth: Math.floor(Math.random() * 1000) + 100 + ' Mbps',
+        connectedDomains: generateConnectedDomains()
+    };
+}
+
+// Generate connected domains
+function generateConnectedDomains() {
+    const domains = [
+        'api.example.com',
+        'mail.company.org',
+        'ftp.internal.net',
+        'db.local.domain',
+        'backup.server.com',
+        'monitoring.system.io'
+    ];
+    
+    const numDomains = Math.floor(Math.random() * 4) + 2;
+    return domains.slice(0, numDomains);
+}
+
+// Update AI status display
+function updateAIStatus(status) {
+    // Create or update AI status indicator
+    let aiIndicator = document.getElementById('aiStatusIndicator');
+    if (!aiIndicator) {
+        aiIndicator = document.createElement('div');
+        aiIndicator.id = 'aiStatusIndicator';
+        aiIndicator.style.cssText = `
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #001100, #003300);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px;
+            max-width: 300px;
+            z-index: 9999;
+            font-size: 14px;
+            color: #00ff00;
+        `;
+        document.body.appendChild(aiIndicator);
+    }
+    
+    aiIndicator.innerHTML = `
+        <div style="font-weight: bold; margin-bottom: 5px;">🤖 AI Manager Status</div>
+        <div style="color: #fff; font-size: 12px;">${status}</div>
+        <div style="color: #888; font-size: 10px; margin-top: 5px;">${new Date().toLocaleTimeString('ar-SA')}</div>
+    `;
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        if (aiIndicator.parentElement) {
+            aiIndicator.style.opacity = '0.3';
+        }
+    }, 3000);
 }
 
 // Simulate new activity
