@@ -1186,7 +1186,7 @@ app.post('/api/test-backdoor', (req, res) => {
 
     // Simulate backdoor testing
     const testResult = Math.random() > 0.2 ? 'active' : 'inactive';
-    const testOutput = `🧪 Backdoor Test Results for ${target}:\n`;
+    let testOutput = `🧪 Backdoor Test Results for ${target}:\n`;
     testOutput += `Status: ${testResult === 'active' ? '✅ Active' : '❌ Inactive'}\n`;
     testOutput += `Response Time: ${Math.floor(Math.random() * 500) + 100}ms\n`;
     testOutput += `Last Contact: ${new Date().toLocaleString('ar-SA')}`;
@@ -1211,7 +1211,7 @@ app.post('/api/test-backdoor', (req, res) => {
 app.post('/api/maintain-access', (req, res) => {
     const { target } = req.body;
 
-    const maintenanceOutput = `🔧 Access Maintenance for ${target}:\n`;
+    let maintenanceOutput = `🔧 Access Maintenance for ${target}:\n`;
     maintenanceOutput += '✅ SSH keys refreshed\n';
     maintenanceOutput += '✅ Web shells updated\n';
     maintenanceOutput += '✅ Persistence mechanisms verified\n';
@@ -1238,7 +1238,7 @@ app.post('/api/auto-deploy-backdoors', (req, res) => {
         return res.status(400).json({ error: 'لا توجد أهداف للنشر عليها' });
     }
 
-    const deploymentOutput = `🤖 Auto-Backdoor Deployment Started:\n`;
+    let deploymentOutput = `🤖 Auto-Backdoor Deployment Started:\n`;
     deploymentOutput += `📊 Targets: ${targets.length}\n`;
     deploymentOutput += `🔐 Backdoor Type: ${backdoorType}\n`;
     deploymentOutput += `⚡ Deployment Strategy: Parallel\n\n`;

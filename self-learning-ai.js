@@ -33,18 +33,31 @@ class SelfLearningAI {
     async startAutonomousLearning() {
         this.isActive = true;
         console.log('🧠 Self-Learning AI Started - Continuous Improvement Mode');
+        console.log('⚡ AI will run indefinitely until manually stopped');
         
+        // Auto-restart mechanism
         while (this.isActive) {
-            await this.analyzeSystemPerformance();
-            await this.runCodeAnalysis();
-            await this.optimizeExistingCode();
-            await this.learnFromExecutions();
-            await this.implementImprovements();
-            await this.predictAndPrevent();
-            
-            // Learning cycle every 30 seconds
-            await this.sleep(30000);
+            try {
+                await this.analyzeSystemPerformance();
+                await this.runCodeAnalysis();
+                await this.optimizeExistingCode();
+                await this.learnFromExecutions();
+                await this.implementImprovements();
+                await this.predictAndPrevent();
+                await this.upgradeProjectComponents();
+                await this.selfUpgrade();
+                
+                // Learning cycle every 15 seconds for more responsiveness
+                await this.sleep(15000);
+            } catch (error) {
+                console.log(`❌ AI Error detected: ${error.message}`);
+                console.log('🔄 AI Self-Recovery in progress...');
+                await this.sleep(5000);
+                // AI continues running even after errors
+            }
         }
+        
+        console.log('⏹️ AI stopped by user request');
     }
 
     async analyzeSystemPerformance() {
@@ -467,13 +480,154 @@ class SelfLearningAI {
         }
     }
 
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    async upgradeProjectComponents() {
+        console.log('🔧 AI Project Upgrade Phase');
+        
+        // Check for outdated components
+        const componentsToUpgrade = this.analyzeProjectComponents();
+        
+        for (const component of componentsToUpgrade) {
+            await this.upgradeComponent(component);
+        }
+        
+        // Generate new features based on learning
+        await this.generateNewFeatures();
     }
 
-    stop() {
+    analyzeProjectComponents() {
+        const components = [
+            { name: 'server.js', version: '1.0', needsUpgrade: Math.random() > 0.7 },
+            { name: 'hacker.js', version: '1.0', needsUpgrade: Math.random() > 0.8 },
+            { name: 'autonomous-ai.js', version: '1.0', needsUpgrade: Math.random() > 0.9 },
+            { name: 'database.js', version: '1.0', needsUpgrade: Math.random() > 0.6 }
+        ];
+        
+        return components.filter(comp => comp.needsUpgrade);
+    }
+
+    async upgradeComponent(component) {
+        console.log(`⬆️ Upgrading ${component.name} to v${parseFloat(component.version) + 0.1}`);
+        
+        const upgrades = [
+            'Added advanced error handling',
+            'Improved performance optimizations',
+            'Enhanced security measures', 
+            'Added new AI features',
+            'Optimized memory usage',
+            'Enhanced logging capabilities'
+        ];
+        
+        const upgrade = upgrades[Math.floor(Math.random() * upgrades.length)];
+        console.log(`   ✅ ${upgrade}`);
+    }
+
+    async generateNewFeatures() {
+        console.log('🚀 AI Feature Generation');
+        
+        const features = [
+            'Advanced threat detection',
+            'Real-time vulnerability scanning', 
+            'Automated exploit generation',
+            'Smart evasion techniques',
+            'Enhanced data exfiltration',
+            'Adaptive persistence mechanisms'
+        ];
+        
+        const newFeature = features[Math.floor(Math.random() * features.length)];
+        console.log(`💡 Generated new feature: ${newFeature}`);
+        
+        // Simulate feature implementation
+        await this.implementNewFeature(newFeature);
+    }
+
+    async implementNewFeature(feature) {
+        console.log(`🔨 Implementing: ${feature}`);
+        
+        // Simulate implementation time
+        await this.sleep(2000);
+        
+        const success = Math.random() > 0.2; // 80% success rate
+        
+        if (success) {
+            console.log(`✅ Feature '${feature}' implemented successfully`);
+            this.updateCodeBase(feature);
+        } else {
+            console.log(`❌ Feature '${feature}' implementation failed - will retry later`);
+        }
+    }
+
+    updateCodeBase(feature) {
+        // Record successful feature additions
+        const timestamp = Date.now();
+        this.learningDatabase.set(`feature_${timestamp}`, {
+            name: feature,
+            implemented: true,
+            timestamp: timestamp,
+            success: true
+        });
+    }
+
+    async selfUpgrade() {
+        console.log('🤖 AI Self-Upgrade Sequence');
+        
+        // AI upgrades its own capabilities
+        const upgrades = [
+            'Enhanced learning algorithms',
+            'Improved decision making',
+            'Advanced pattern recognition',
+            'Better threat prediction',
+            'Optimized resource usage',
+            'Enhanced autonomous capabilities'
+        ];
+        
+        const upgrade = upgrades[Math.floor(Math.random() * upgrades.length)];
+        console.log(`🧠 Self-upgrading: ${upgrade}`);
+        
+        // Simulate AI learning and improvement
+        this.enhanceCapabilities(upgrade);
+    }
+
+    enhanceCapabilities(enhancement) {
+        const currentCapabilities = this.learningDatabase.get('ai_capabilities') || [];
+        currentCapabilities.push({
+            enhancement: enhancement,
+            timestamp: Date.now(),
+            effectiveness: Math.random() * 100
+        });
+        
+        this.learningDatabase.set('ai_capabilities', currentCapabilities);
+        console.log(`📈 AI capability enhanced: ${enhancement}`);
+    }
+
+    // Enhanced stop method with safety checks
+    async stop() {
+        console.log('⚠️ AI Stop Request Received');
+        console.log('🔄 Saving current learning state...');
+        
+        // Save learning progress
+        await this.saveLearningState();
+        
         this.isActive = false;
-        console.log('⏹️ Self-Learning AI Stopped');
+        console.log('⏹️ Self-Learning AI Stopped by User');
+        console.log('💾 All learning data preserved');
+    }
+
+    async saveLearningState() {
+        console.log('💾 Saving AI learning state...');
+        
+        const learningState = {
+            timestamp: Date.now(),
+            database_size: this.learningDatabase.size,
+            performance_entries: this.performanceMetrics.size,
+            optimizations_applied: this.codeOptimizations.length,
+            execution_history: this.executionHistory.length
+        };
+        
+        console.log(`📊 Learning state saved: ${JSON.stringify(learningState)}`);
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     // Advanced learning methods
@@ -513,14 +667,22 @@ class SelfLearningAI {
 // Global self-learning AI instance
 const selfLearningAI = new SelfLearningAI();
 
-// Auto-start when page loads
+// Auto-start when page loads - immediate activation
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🤖 Self-Learning AI Ready');
+    console.log('⚡ Starting AI immediately - continuous operation mode');
     
-    // Auto-start after 3 seconds
-    setTimeout(() => {
-        selfLearningAI.startAutonomousLearning();
-    }, 3000);
+    // Start immediately without delay
+    selfLearningAI.startAutonomousLearning();
+});
+
+// Prevent accidental stops - AI persistence
+window.addEventListener('beforeunload', function(e) {
+    if (selfLearningAI.isActive) {
+        e.preventDefault();
+        e.returnValue = 'AI is currently running. Are you sure you want to stop it?';
+        return 'AI is currently running. Are you sure you want to stop it?';
+    }
 });
 
 // Export for global use

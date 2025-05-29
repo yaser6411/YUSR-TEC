@@ -35,20 +35,31 @@ class AutonomousAI {
 
     async startAutonomousScanning() {
         this.isActive = true;
-        console.log('🚀 Autonomous AI Scanning Started');
+        console.log('🚀 Autonomous AI Scanning Started - Continuous Mode');
+        console.log('⚡ AI will scan indefinitely until manually stopped');
         
         while (this.isActive) {
-            await this.intelligentTargetDiscovery();
-            await this.adaptiveScanning();
-            await this.smartExploitation();
-            await this.persistentAccess();
-            
-            // AI learning cycle
-            this.updateKnowledge();
-            
-            // Wait before next cycle
-            await this.sleep(30000); // 30 seconds
+            try {
+                await this.intelligentTargetDiscovery();
+                await this.adaptiveScanning();
+                await this.smartExploitation();
+                await this.persistentAccess();
+                await this.upgradeCapabilities();
+                
+                // AI learning cycle
+                this.updateKnowledge();
+                
+                // Shorter cycle for more aggressive scanning
+                await this.sleep(10000); // 10 seconds
+            } catch (error) {
+                console.log(`❌ Autonomous AI Error: ${error.message}`);
+                console.log('🔄 Auto-recovery in progress...');
+                await this.sleep(3000);
+                // Continue running even after errors
+            }
         }
+        
+        console.log('⏹️ Autonomous AI stopped by user request');
     }
 
     async intelligentTargetDiscovery() {
@@ -273,11 +284,59 @@ class AutonomousAI {
         });
     }
 
+    async upgradeCapabilities() {
+        console.log('🔧 Autonomous AI Self-Upgrade');
+        
+        // Upgrade scanning techniques
+        const newTechniques = [
+            'Zero-day exploit generation',
+            'Advanced evasion algorithms', 
+            'AI-powered social engineering',
+            'Quantum-resistant cryptography bypass',
+            'Machine learning attack vectors',
+            'Behavioral analysis exploits'
+        ];
+        
+        const technique = newTechniques[Math.floor(Math.random() * newTechniques.length)];
+        console.log(`🚀 Added new capability: ${technique}`);
+        
+        // Enhance knowledge base
+        this.enhanceKnowledgeBase(technique);
+    }
+
+    enhanceKnowledgeBase(technique) {
+        const currentKnowledge = this.knowledgeBase.get('advanced_techniques') || [];
+        currentKnowledge.push({
+            technique: technique,
+            added: Date.now(),
+            effectiveness: Math.random() * 100
+        });
+        
+        this.knowledgeBase.set('advanced_techniques', currentKnowledge);
+        console.log(`📚 Knowledge base enhanced with: ${technique}`);
+    }
+
     updateKnowledge() {
         // AI learning from successful attacks
         if (this.learningMode) {
-            console.log(`🧠 AI Knowledge Update: Learning from ${attackSession.vulnerabilitiesExploited} successful exploits`);
+            console.log(`🧠 AI Knowledge Update: Learning from ${attackSession?.vulnerabilitiesExploited || 0} successful exploits`);
+            
+            // Continuous learning enhancement
+            this.improveLearningAlgorithms();
         }
+    }
+
+    improveLearningAlgorithms() {
+        const improvements = [
+            'Pattern recognition enhanced',
+            'Prediction accuracy improved', 
+            'Target selection optimized',
+            'Exploit success rate increased',
+            'Evasion techniques refined'
+        ];
+        
+        const improvement = improvements[Math.floor(Math.random() * improvements.length)];
+        console.log(`📈 Learning improvement: ${improvement}`);
     }
 
     sleep(ms) {
@@ -293,15 +352,22 @@ class AutonomousAI {
 // Global autonomous AI instance
 const autonomousAI = new AutonomousAI();
 
-// Auto-start when page loads
+// Auto-start when page loads - immediate activation
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🤖 Autonomous AI Ready');
+    console.log('⚡ Starting autonomous scanning immediately');
     
-    // Auto-start after 5 seconds
-    setTimeout(() => {
-        autonomousAI.startAutonomousScanning();
-    }, 5000);
+    // Start immediately
+    autonomousAI.startAutonomousScanning();
 });
+
+// Keep autonomous AI running persistently  
+setInterval(() => {
+    if (!autonomousAI.isActive) {
+        console.log('🔄 Auto-restarting Autonomous AI...');
+        autonomousAI.startAutonomousScanning();
+    }
+}, 60000); // Check every minute and restart if stopped
 
 // Export for global use
 window.autonomousAI = autonomousAI;
