@@ -293,6 +293,7 @@ function createConnectionLine(node1, node2) {
 
 // Show target details in modal
 function showTargetDetails(target) {
+    selectedTarget = target;
     const modal = document.getElementById('targetModal');
     const content = document.getElementById('modalContent');
     
@@ -336,6 +337,7 @@ function showTargetDetails(target) {
             <button onclick="exfiltrateData('${target.address}')" style="background: #ff6600; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">📁 سرقة البيانات</button>
             <button onclick="installPersistence('${target.address}')" style="background: #00aa00; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">🔐 تثبيت استمرارية</button>
             <button onclick="coverTracks('${target.address}')" style="background: #333; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">👻 إخفاء الأثر</button>
+            <button onclick="startVictimControl('${target.address}')" style="background: #ff0000; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; margin: 5px;">🎮 التحكم في الضحية</button>
         </div>
         
         ${target.hasBackdoor ? `
@@ -344,6 +346,8 @@ function showTargetDetails(target) {
                 <div style="color: #00ff00;">✅ SSH Backdoor - نشط</div>
                 <div style="color: #00ff00;">✅ Web Shell - نشط</div>
                 <div style="color: #00ff00;">✅ Reverse Shell - نشط</div>
+                <div style="color: #00ff00;">✅ RAT (Remote Access Trojan) - نشط</div>
+                <div style="color: #00ff00;">✅ Keylogger - نشط</div>
             </div>
         ` : ''}
     `;
@@ -601,6 +605,227 @@ function coverTracks(target) {
     alert(`👻 إخفاء آثار النشاط على ${target}...`);
 }
 
+// Start victim control interface
+function startVictimControl(targetAddress) {
+    console.log(`🎮 Starting victim control for ${targetAddress}`);
+    closeTargetModal();
+    
+    // Show control panels
+    document.getElementById('victimControlPanel').style.display = 'block';
+    document.getElementById('victimMonitor').style.display = 'block';
+    
+    // Initialize victim monitoring
+    initializeVictimMonitoring(targetAddress);
+    
+    alert(`🎮 بدء التحكم في الضحية: ${targetAddress}`);
+}
+
+// Initialize victim monitoring
+function initializeVictimMonitoring(targetAddress) {
+    const victimInfo = document.getElementById('victimDetailsContent');
+    
+    // Generate detailed victim information
+    const victimDetails = generateVictimDetails(targetAddress);
+    
+    victimInfo.innerHTML = `
+        <div style="color: #ff0000; font-weight: bold; margin-bottom: 15px;">🎯 الهدف: ${targetAddress}</div>
+        
+        <div style="margin: 10px 0;">
+            <strong>📱 نوع الجهاز:</strong> ${victimDetails.deviceType}
+        </div>
+        <div style="margin: 10px 0;">
+            <strong>💻 نظام التشغيل:</strong> ${victimDetails.os}
+        </div>
+        <div style="margin: 10px 0;">
+            <strong>🌐 المتصفح:</strong> ${victimDetails.browser}
+        </div>
+        <div style="margin: 10px 0;">
+            <strong>📍 الموقع الجغرافي:</strong> ${victimDetails.location}
+        </div>
+        <div style="margin: 10px 0;">
+            <strong>📶 عنوان IP:</strong> ${victimDetails.ipAddress}
+        </div>
+        <div style="margin: 10px 0;">
+            <strong>🕒 آخر نشاط:</strong> ${victimDetails.lastActivity}
+        </div>
+        
+        <div style="background: #222; padding: 10px; border-radius: 5px; margin: 15px 0;">
+            <strong>🔍 الأجهزة المتاحة:</strong>
+            <div style="margin: 5px 0;">
+                📷 كاميرا: ${victimDetails.devices.camera ? '✅ متاحة' : '❌ غير متاحة'}
+            </div>
+            <div style="margin: 5px 0;">
+                🎤 مايكروفون: ${victimDetails.devices.microphone ? '✅ متاح' : '❌ غير متاح'}
+            </div>
+            <div style="margin: 5px 0;">
+                🖱️ ماوس: ${victimDetails.devices.mouse ? '✅ متاح' : '❌ غير متاح'}
+            </div>
+            <div style="margin: 5px 0;">
+                ⌨️ لوحة المفاتيح: ${victimDetails.devices.keyboard ? '✅ متاحة' : '❌ غير متاحة'}
+            </div>
+        </div>
+        
+        <div style="background: #001100; border: 1px solid #00ff00; padding: 10px; border-radius: 5px; margin: 15px 0;">
+            <strong>📊 إحصائيات المراقبة:</strong>
+            <div style="margin: 5px 0;">📸 لقطات التقطت: ${victimDetails.stats.screenshots}</div>
+            <div style="margin: 5px 0;">🎵 تسجيلات صوتية: ${victimDetails.stats.audioRecordings}</div>
+            <div style="margin: 5px 0;">⌨️ ضغطات المفاتيح: ${victimDetails.stats.keystrokes}</div>
+            <div style="margin: 5px 0;">🖱️ نقرات الماوس: ${victimDetails.stats.mouseClicks}</div>
+        </div>
+    `;
+    
+    // Start live monitoring simulation
+    startLiveMonitoring(targetAddress);
+}
+
+// Generate detailed victim information
+function generateVictimDetails(targetAddress) {
+    const devices = ['Windows PC', 'MacBook Pro', 'Linux Workstation', 'Android Phone', 'iPhone'];
+    const browsers = ['Chrome 120.0', 'Firefox 121.0', 'Safari 17.2', 'Edge 120.0'];
+    const locations = ['New York, USA', 'London, UK', 'Tokyo, Japan', 'Berlin, Germany', 'Sydney, Australia'];
+    
+    return {
+        deviceType: devices[Math.floor(Math.random() * devices.length)],
+        os: selectedTarget?.systemInfo?.os || 'Windows 11',
+        browser: browsers[Math.floor(Math.random() * browsers.length)],
+        location: selectedTarget?.location ? `${selectedTarget.location.city}, ${selectedTarget.location.country}` : locations[Math.floor(Math.random() * locations.length)],
+        ipAddress: targetAddress.includes('.') ? targetAddress : `192.168.1.${Math.floor(Math.random() * 254) + 1}`,
+        lastActivity: new Date().toLocaleString('ar-SA'),
+        devices: {
+            camera: Math.random() > 0.2,
+            microphone: Math.random() > 0.1,
+            mouse: true,
+            keyboard: true
+        },
+        stats: {
+            screenshots: Math.floor(Math.random() * 50) + 10,
+            audioRecordings: Math.floor(Math.random() * 20) + 5,
+            keystrokes: Math.floor(Math.random() * 5000) + 1000,
+            mouseClicks: Math.floor(Math.random() * 1000) + 200
+        }
+    };
+}
+
+// Start live monitoring simulation
+function startLiveMonitoring(targetAddress) {
+    const screenElement = document.getElementById('victimScreen');
+    
+    // Simulate live screen capture
+    let frameCount = 0;
+    const monitoringInterval = setInterval(() => {
+        frameCount++;
+        
+        if (frameCount % 5 === 0) {
+            // Simulate screen content change
+            const activities = [
+                '📧 يكتب رسالة إلكترونية',
+                '🌐 يتصفح موقع البنك',
+                '💬 محادثة على WhatsApp',
+                '📄 يعمل على مستند سري',
+                '🎮 يلعب لعبة',
+                '📱 يستخدم التطبيقات',
+                '🔑 يدخل كلمات مرور',
+                '💳 يدخل بيانات بطاقة ائتمان'
+            ];
+            
+            const currentActivity = activities[Math.floor(Math.random() * activities.length)];
+            screenElement.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; margin-bottom: 20px;">📺</div>
+                    <div style="font-size: 16px; color: #00ff00;">البث المباشر نشط</div>
+                    <div style="font-size: 14px; color: #fff; margin: 10px 0;">النشاط الحالي:</div>
+                    <div style="font-size: 18px; color: #ff4444;">${currentActivity}</div>
+                    <div style="margin-top: 20px; font-size: 12px; color: #888;">
+                        الإطار: ${frameCount} | FPS: 30 | الجودة: HD
+                    </div>
+                </div>
+            `;
+        }
+    }, 1000);
+    
+    // Store interval for cleanup
+    window.victimMonitoringInterval = monitoringInterval;
+}
+
+// Victim control functions
+function activateCamera() {
+    alert('📹 تم تفعيل الكاميرا بنجاح - جارٍ البث المباشر');
+    logVictimAction('Camera activated');
+}
+
+function takeScreenshot() {
+    alert('📸 تم التقاط لقطة شاشة - حُفظت في ملف الأهداف');
+    logVictimAction('Screenshot captured');
+}
+
+function recordScreen() {
+    alert('🎥 بدء تسجيل الشاشة - مدة التسجيل: غير محدودة');
+    logVictimAction('Screen recording started');
+}
+
+function activateMicrophone() {
+    alert('🎤 تم تفعيل المايكروفون - جارٍ التنصت المباشر');
+    logVictimAction('Microphone activated');
+}
+
+function recordAudio() {
+    alert('🎵 بدء التسجيل الصوتي - جودة عالية');
+    logVictimAction('Audio recording started');
+}
+
+function playSound() {
+    const sounds = ['تحذير أمني', 'صوت إنذار', 'رسالة صوتية مزيفة', 'صوت مخيف'];
+    const selectedSound = sounds[Math.floor(Math.random() * sounds.length)];
+    alert(`🔊 تم تشغيل: ${selectedSound}`);
+    logVictimAction(`Played sound: ${selectedSound}`);
+}
+
+function controlMouse() {
+    alert('🖱️ تم السيطرة على الماوس - يمكنك الآن التحكم في مؤشر الضحية');
+    logVictimAction('Mouse control activated');
+}
+
+function disableMouse() {
+    alert('🚫 تم تعطيل الماوس - الضحية لا يستطيع استخدام الماوس');
+    logVictimAction('Mouse disabled');
+}
+
+function fakeClick() {
+    const actions = ['نقر على رابط ضار', 'فتح ملف مشبوه', 'تنزيل برنامج ضار', 'النقر على إعلان'];
+    const action = actions[Math.floor(Math.random() * actions.length)];
+    alert(`👆 تم تنفيذ: ${action}`);
+    logVictimAction(`Fake click: ${action}`);
+}
+
+function captureKeystrokes() {
+    alert('⌨️ تم تفعيل تسجيل المفاتيح - جارٍ تسجيل كل ما يكتبه الضحية');
+    logVictimAction('Keylogger activated');
+}
+
+function injectKeystrokes() {
+    const messages = ['تم اختراق جهازك', 'أرسل $1000 إلى هذا الحساب', 'كلمة مرورك ضعيفة', 'قم بتحديث نظامك فوراً'];
+    const message = messages[Math.floor(Math.random() * messages.length)];
+    alert(`💉 تم حقن النص: "${message}"`);
+    logVictimAction(`Injected keystrokes: ${message}`);
+}
+
+function disableKeyboard() {
+    alert('🔒 تم تعطيل لوحة المفاتيح - الضحية لا يستطيع الكتابة');
+    logVictimAction('Keyboard disabled');
+}
+
+// Log victim actions
+function logVictimAction(action) {
+    const timestamp = new Date().toLocaleString('ar-SA');
+    console.log(`🎯 [${timestamp}] Victim Action: ${action}`);
+    
+    // Update victim stats
+    if (selectedTarget) {
+        selectedTarget.activeSessions += 1;
+        updateLiveStats();
+    }
+}
+
 // Close modal when clicking outside
 window.onclick = function(event) {
     const modal = document.getElementById('targetModal');
@@ -608,3 +833,10 @@ window.onclick = function(event) {
         modal.style.display = 'none';
     }
 }
+
+// Cleanup function when leaving page
+window.addEventListener('beforeunload', function() {
+    if (window.victimMonitoringInterval) {
+        clearInterval(window.victimMonitoringInterval);
+    }
+});
