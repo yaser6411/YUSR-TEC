@@ -1,4 +1,3 @@
-
 const apiUrl = '/api';
 
 let attackSession = {
@@ -38,7 +37,7 @@ function startAIHack() {
     // Show stats and output
     document.getElementById('attackStats').style.display = 'grid';
     document.getElementById('hackOutput').style.display = 'block';
-    
+
     const output = document.getElementById('hackOutput');
     output.innerHTML = '🚀 بدء عملية الاختراق الذكي...\n';
     output.innerHTML += `🎯 الهدف: ${target}\n`;
@@ -75,7 +74,7 @@ function generatePayloads() {
     }
 
     document.getElementById('payloadSection').style.display = 'block';
-    
+
     fetch(`${apiUrl}/generate-payloads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -118,7 +117,7 @@ function executePayload(payload) {
 
     const output = document.getElementById('hackOutput');
     output.innerHTML += `\n⚡ تنفيذ الحمولة: ${payload}\n`;
-    
+
     fetch(`${apiUrl}/execute-payload`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -149,9 +148,9 @@ function startAttackTimer() {
             clearInterval(timer);
             return;
         }
-        
+
         updateStats();
-        
+
         // Simulate attack progress
         if (Math.random() > 0.7) {
             attackSession.attacksLaunched++;
@@ -175,26 +174,26 @@ function generateRandomAttackResult() {
         '🔐 محاولة تجاوز authentication',
         '📂 البحث عن ملفات backup مكشوفة'
     ];
-    
+
     const statuses = ['✅ نجح', '❌ فشل', '⚠️ جزئي'];
     const result = results[Math.floor(Math.random() * results.length)];
     const status = statuses[Math.floor(Math.random() * statuses.length)];
-    
+
     if (status === '✅ نجح') {
         attackSession.vulnerabilitiesExploited++;
     }
-    
+
     return `${result} - ${status}`;
 }
 
 function updateStats() {
     document.getElementById('attacksLaunched').textContent = attackSession.attacksLaunched;
     document.getElementById('vulnerabilitiesExploited').textContent = attackSession.vulnerabilitiesExploited;
-    
+
     const successRate = attackSession.attacksLaunched > 0 ? 
         Math.round((attackSession.vulnerabilitiesExploited / attackSession.attacksLaunched) * 100) : 0;
     document.getElementById('successRate').textContent = successRate + '%';
-    
+
     if (attackSession.startTime) {
         const elapsed = new Date() - attackSession.startTime;
         const minutes = Math.floor(elapsed / 60000);
@@ -215,7 +214,7 @@ function clearResults() {
 function exportHackReport() {
     const target = document.getElementById('hackTarget').value.trim();
     const output = document.getElementById('hackOutput').textContent;
-    
+
     const report = `
 YUSR-TEC - تقرير الاختراق الذكي
 ===============================
@@ -232,7 +231,7 @@ ${output}
 
 تحذير: هذا التقرير للأغراض التعليمية والاختبار الأمني فقط
 `;
-    
+
     const blob = new Blob([report], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -276,7 +275,7 @@ function generateAndroidPayload() {
     const output = document.getElementById('hackOutput');
     output.innerHTML += '\n🤖 إنشاء تروجان أندرويد متقدم...\n';
     output.innerHTML += '======================================\n';
-    
+
     // Simulate realistic payload generation
     setTimeout(() => {
         output.innerHTML += '📱 استخدام msfvenom لإنشاء payload...\n';
@@ -298,14 +297,14 @@ function startADBExploit() {
     const output = document.getElementById('hackOutput');
     output.innerHTML += '\n⚡ بدء استغلال ADB (Android Debug Bridge)...\n';
     output.innerHTML += '==========================================\n';
-    
+
     setTimeout(() => {
         output.innerHTML += '🔍 فحص الأجهزة المتصلة بـ ADB...\n';
         output.innerHTML += 'adb devices\n';
         output.innerHTML += 'List of devices attached:\n';
         output.innerHTML += '192.168.1.105:5555  device\n';
         output.innerHTML += '✅ تم العثور على جهاز أندرويد مفتوح!\n\n';
-        
+
         output.innerHTML += '📱 تثبيت باب خلفي عبر ADB...\n';
         output.innerHTML += 'adb install -r backdoor.apk\n';
         output.innerHTML += 'Success\n';
@@ -322,7 +321,7 @@ function socialEngineeringAttack() {
     const output = document.getElementById('hackOutput');
     output.innerHTML += '\n🎭 بدء هجوم الهندسة الاجتماعية...\n';
     output.innerHTML += '====================================\n';
-    
+
     setTimeout(() => {
         output.innerHTML += '📧 إرسال رسالة تصيد احترافية...\n';
         output.innerHTML += `📱 الهدف: ${target}\n`;
@@ -339,7 +338,7 @@ function wifiPineapple() {
     const output = document.getElementById('hackOutput');
     output.innerHTML += '\n📡 تشغيل WiFi Pineapple للاعتراض...\n';
     output.innerHTML += '===================================\n';
-    
+
     setTimeout(() => {
         output.innerHTML += '🍍 تهيئة WiFi Pineapple Mark VII...\n';
         output.innerHTML += '📶 إنشاء نقطة وصول وهمية: "FREE_WIFI_GUEST"\n';
@@ -359,7 +358,7 @@ function bluetoothHack() {
     const output = document.getElementById('hackOutput');
     output.innerHTML += '\n🔵 استغلال البلوتوث (Bluejacking/Bluesnarfing)...\n';
     output.innerHTML += '===============================================\n';
-    
+
     setTimeout(() => {
         output.innerHTML += '📡 فحص أجهزة البلوتوث القريبة...\n';
         output.innerHTML += 'hcitool scan\n';
@@ -367,7 +366,7 @@ function bluetoothHack() {
         output.innerHTML += '  AA:BB:CC:DD:EE:FF  Samsung Galaxy S21\n';
         output.innerHTML += '  11:22:33:44:55:66  iPhone 12 Pro\n';
         output.innerHTML += '  FF:EE:DD:CC:BB:AA  Xiaomi Mi 11\n\n';
-        
+
         output.innerHTML += '🎯 استهداف Samsung Galaxy S21...\n';
         output.innerHTML += '🔓 استغلال ثغرة البلوتوث CVE-2020-0022...\n';
         output.innerHTML += '📱 تم الوصول لجهات الاتصال\n';
@@ -383,7 +382,7 @@ function smsPhishing() {
     const output = document.getElementById('hackOutput');
     output.innerHTML += '\n📧 هجوم التصيد عبر الرسائل النصية (Smishing)...\n';
     output.innerHTML += '=============================================\n';
-    
+
     setTimeout(() => {
         output.innerHTML += `📱 الهدف: ${phoneNumber || 'غير محدد'}\n`;
         output.innerHTML += '💬 إنشاء رسائل تصيد متطورة...\n';
@@ -404,10 +403,10 @@ function executeAndroidHack() {
     const phoneNumber = document.getElementById('phoneNumber').value.trim();
     const exploitType = document.getElementById('androidExploitType').value;
     const output = document.getElementById('hackOutput');
-    
+
     output.innerHTML += `\n🚀 تنفيذ ${getExploitTypeText(exploitType)} على ${target || phoneNumber}...\n`;
     output.innerHTML += '================================================\n';
-    
+
     setTimeout(() => {
         executeSpecificAndroidExploit(exploitType, output);
     }, 1500);
@@ -421,49 +420,49 @@ function executeSpecificAndroidExploit(exploitType, output) {
             output.innerHTML += '🔐 تم الحصول على الصلاحيات: ROOT ACCESS\n';
             output.innerHTML += '📡 اتصال عكسي نشط: 192.168.1.100:4444\n';
             break;
-            
+
         case 'keylogger':
             output.innerHTML += '⌨️ تفعيل Keylogger متقدم...\n';
             output.innerHTML += '📝 تسجيل جميع النقرات والكتابة\n';
             output.innerHTML += '🔑 التقط كلمة مرور: bank123!@#\n';
             output.innerHTML += '💳 التقط رقم بطاقة: 4***-****-****-1234\n';
             break;
-            
+
         case 'camera-spy':
             output.innerHTML += '📸 تفعيل تجسس الكاميرا...\n';
             output.innerHTML += '📷 التقاط صور كل 30 ثانية\n';
             output.innerHTML += '🎥 تسجيل فيديو عند اكتشاف الوجه\n';
             output.innerHTML += '💾 حفظ الملفات في: /sdcard/.hidden/\n';
             break;
-            
+
         case 'mic-spy':
             output.innerHTML += '🎤 تفعيل تجسس الميكروفون...\n';
             output.innerHTML += '🔊 تسجيل صوتي مستمر\n';
             output.innerHTML += '📞 اعتراض المكالمات الهاتفية\n';
             output.innerHTML += '🎵 تحليل الصوت بالذكاء الاصطناعي\n';
             break;
-            
+
         case 'location-tracker':
             output.innerHTML += '📍 تفعيل تتبع الموقع الدقيق...\n';
             output.innerHTML += '🗺️ الموقع الحالي: 24.7136° N, 46.6753° E (الرياض)\n';
             output.innerHTML += '🚗 تتبع الحركة: السرعة 45 كم/س\n';
             output.innerHTML += '🏠 المواقع المتكررة: البيت، العمل، المول\n';
             break;
-            
+
         case 'sms-intercept':
             output.innerHTML += '📧 تفعيل اعتراض الرسائل...\n';
             output.innerHTML += '💬 اعتراض SMS وWhatsApp\n';
             output.innerHTML += '🔐 رسالة OTP التقطت: 123456\n';
             output.innerHTML += '📱 إعادة توجيه الرسائل للمهاجم\n';
             break;
-            
+
         case 'call-recorder':
             output.innerHTML += '📞 تفعيل تسجيل المكالمات...\n';
             output.innerHTML += '🎙️ تسجيل جميع المكالمات الصادرة والواردة\n';
             output.innerHTML += '🔍 تحليل الكلمات المفتاحية\n';
             output.innerHTML += '☁️ رفع التسجيلات للخادم\n';
             break;
-            
+
         case 'data-theft':
             output.innerHTML += '💾 بدء سرقة البيانات الشاملة...\n';
             output.innerHTML += '📱 نسخ جهات الاتصال: 247 جهة\n';
@@ -472,12 +471,12 @@ function executeSpecificAndroidExploit(exploitType, output) {
             output.innerHTML += '📋 نسخ التطبيقات المثبتة: 78 تطبيق\n';
             break;
     }
-    
+
     output.innerHTML += '\n🎯 العملية مكتملة بنجاح!\n';
     output.innerHTML += '📊 مستوى التسلل: COMPLETE ACCESS\n';
     output.innerHTML += '⚡ الحالة: BACKDOOR ACTIVE\n\n';
     output.scrollTop = output.scrollHeight;
-    
+
     // Update attack statistics
     attackSession.vulnerabilitiesExploited++;
     attackSession.attacksLaunched++;
@@ -496,4 +495,74 @@ function getExploitTypeText(type) {
         'data-theft': 'سرقة البيانات'
     };
     return types[type] || type;
+}
+
+// Autonomous AI Control Functions
+function startAutonomousAI() {
+    document.getElementById('aiStatusPanel').style.display = 'block';
+    document.getElementById('aiCurrentStatus').textContent = 'نشط';
+    document.getElementById('aiCurrentActivity').innerHTML = '🤖 بدء تشغيل الذكاء الاصطناعي المستقل...\n';
+
+    if (window.autonomousAI) {
+        window.autonomousAI.startAutonomousScanning();
+        updateAIDisplay();
+    }
+
+    alert('🤖 تم تشغيل الذكاء الاصطناعي المستقل بنجاح');
+}
+
+function stopAutonomousAI() {
+    document.getElementById('aiCurrentStatus').textContent = 'متوقف';
+
+    if (window.autonomousAI) {
+        window.autonomousAI.stop();
+    }
+
+    alert('⏹️ تم إيقاف الذكاء الاصطناعي المستقل');
+}
+
+function updateAIDisplay() {
+    setInterval(() => {
+        if (window.autonomousAI && window.autonomousAI.isActive) {
+            // Update discovered targets
+            const discovered = window.autonomousAI.targetQueue.length + Math.floor(Math.random() * 5);
+            document.getElementById('aiDiscoveredTargets').textContent = discovered;
+
+            // Update compromised systems
+            document.getElementById('aiCompromisedSystems').textContent = attackSession.persistentAccess.length;
+
+            // Update data exfiltrated
+            document.getElementById('aiDataExfiltrated').textContent = attackSession.dataExfiltrated + ' MB';
+
+            // Update activity log
+            if (Math.random() > 0.7) {
+                const activities = [
+                    '🔍 اكتشاف هدف جديد: ' + generateRandomTarget(),
+                    '💥 نجح استغلال ثغرة SQL Injection',
+                    '🔓 تم كسر كلمة مرور المشرف',
+                    '💾 تم تسريب قاعدة بيانات العملاء',
+                    '🚪 تم تثبيت باب خلفي جديد',
+                    '🔄 تحديث أدوات الاستغلال',
+                    '🧠 تعلم تقنية جديدة من الهجوم الناجح'
+                ];
+
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                const activityLog = document.getElementById('aiCurrentActivity');
+                activityLog.innerHTML += `${new Date().toLocaleTimeString()}: ${activity}\n`;
+                activityLog.scrollTop = activityLog.scrollHeight;
+            }
+        }
+    }, 3000);
+}
+
+function generateRandomTarget() {
+    const targets = [
+        'corporate-server.com',
+        '10.0.0.' + Math.floor(Math.random() * 255),
+        'backup-system.net',
+        'legacy-app.org',
+        '192.168.1.' + Math.floor(Math.random() * 255)
+    ];
+
+    return targets[Math.floor(Math.random() * targets.length)];
 }

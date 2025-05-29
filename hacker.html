@@ -176,7 +176,7 @@
 
         <div class="hack-panel" id="androidSection" style="display: none;">
             <h2>🤖 أدوات اختراق الأندرويد المتقدمة</h2>
-            
+
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
                 <button onclick="generateAndroidPayload()" class="hack-button">📱 إنشاء تروجان أندرويد</button>
                 <button onclick="startADBExploit()" class="hack-button">⚡ استغلال ADB</button>
@@ -190,7 +190,7 @@
                 <h4>🛠️ أدوات متقدمة</h4>
                 <label>رقم الهاتف المستهدف:</label>
                 <input type="text" id="phoneNumber" class="target-input" placeholder="+966501234567">
-                
+
                 <label>نوع الاستغلال:</label>
                 <select id="androidExploitType" class="target-input">
                     <option value="trojan">📱 تروجان متقدم</option>
@@ -202,7 +202,7 @@
                     <option value="call-recorder">📞 تسجيل المكالمات</option>
                     <option value="data-theft">💾 سرقة البيانات</option>
                 </select>
-                
+
                 <button onclick="executeAndroidHack()" class="hack-button">🚀 تنفيذ الهجوم</button>
             </div>
         </div>
@@ -211,8 +211,36 @@
 
         <div style="text-align: center; margin: 30px 0;">
             <button onclick="exportHackReport()" style="background: #ff6600; color: #fff; padding: 12px 25px; border: none; border-radius: 5px;">📤 تصدير تقرير الاختراق</button>
+                <button onclick="startAutonomousAI()" style="background: #ff6600; margin-left: 10px;">🤖 تشغيل الذكاء الاصطناعي المستقل</button>
+                <button onclick="stopAutonomousAI()" style="background: #ff0000; margin-left: 10px;">⏹️ إيقاف الذكاء الاصطناعي</button>
+            </div>
         </div>
-    </div>
+
+        <!-- Autonomous AI Status Panel -->
+        <div id="aiStatusPanel" style="background: #001122; border: 2px solid #00ff00; border-radius: 10px; padding: 20px; margin: 20px 0; display: none;">
+            <h3 style="color: #00ff00;">🤖 حالة الذكاء الاصطناعي المستقل</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="text-align: center;">
+                    <div style="color: #888;">الأهداف المكتشفة</div>
+                    <div id="aiDiscoveredTargets" style="color: #00ff00; font-size: 24px; font-weight: bold;">0</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #888;">الأنظمة المخترقة</div>
+                    <div id="aiCompromisedSystems" style="color: #ff4444; font-size: 24px; font-weight: bold;">0</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #888;">البيانات المسربة</div>
+                    <div id="aiDataExfiltrated" style="color: #ffaa00; font-size: 24px; font-weight: bold;">0 MB</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #888;">حالة الذكاء الاصطناعي</div>
+                    <div id="aiCurrentStatus" style="color: #00ffff; font-size: 18px; font-weight: bold;">نشط</div>
+                </div>
+            </div>
+            <div id="aiCurrentActivity" style="background: #000; padding: 15px; border-radius: 5px; color: #00ff00; font-family: monospace; font-size: 14px; max-height: 200px; overflow-y: auto;">
+                🤖 الذكاء الاصطناعي جاهز للبدء...
+            </div>
+        </div>
 
     <script src="hacker.js"></script>
 </body>
